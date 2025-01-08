@@ -9,11 +9,11 @@ import {
   GraduationCap,
   ChevronRight,
   RocketIcon,
-  Star
+  Star,
 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "./ui/button";
-
+import { prisma } from "@/lib/prisma";
 
 interface CourseProps {
   slug: string;
@@ -22,7 +22,6 @@ interface CourseProps {
   chapterTotal: number;
   learnHours: number;
 }
-
 
 const hotCourses: CourseProps[] = [
   {
@@ -41,7 +40,6 @@ const hotCourses: CourseProps[] = [
   },
 ];
 
-
 const comingSoonCourses: CourseProps[] = [
   {
     slug: "game-dev-101",
@@ -59,8 +57,8 @@ const comingSoonCourses: CourseProps[] = [
   },
 ];
 
-
-export default function CourseList() {
+export default async function CourseList() {
+  const courses = await prisma.course.findMany();
   return (
     <main className="min-h-screen bg-gradient-to-b from-background via-background/90 to-background text-foreground">
       <div className="max-w-6xl mx-auto px-4 py-20">
@@ -76,12 +74,12 @@ export default function CourseList() {
               Explore Our Courses
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl">
-              Start your coding adventure with our specially designed courses for young developers.
-              Learn at your own pace and build amazing projects!
+              Start your coding adventure with our specially designed courses
+              for young developers. Learn at your own pace and build amazing
+              projects!
             </p>
           </div>
         </header>
-
 
         <section className="mb-20 space-y-8">
           <div className="flex items-center justify-between">
@@ -89,51 +87,50 @@ export default function CourseList() {
               <Star className="w-8 h-8 text-yellow-500" />
               Popular Courses
             </h2>
-            <Link href="/courses/all" className="text-primary hover:text-primary/80 flex items-center gap-2">
+            <Link
+              href="/courses/all"
+              className="text-primary hover:text-primary/80 flex items-center gap-2"
+            >
               View all courses
               <ChevronRight className="w-4 h-4" />
             </Link>
           </div>
 
-
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {hotCourses.map((course) => (
+            {courses.map((course) => (
               <Card
-                key={course.slug}
+                key={course.id}
                 className="group hover:shadow-lg hover:shadow-primary/5 relative bg-card/30 border-border/50 hover:border-primary/50 backdrop-blur-sm transition-all duration-500"
               >
                 <CardContent className="p-8">
                   <Link
-                    href={`/courses/${course.slug}/chapter-1`}
+                    href={`/courses/${course.id}`}
                     className="block space-y-6"
                   >
                     <Badge className="bg-primary/10 text-primary hover:bg-primary/20 transition-colors">
                       Most Popular
                     </Badge>
 
-
                     <div className="space-y-3">
                       <h2 className="text-2xl font-bold text-foreground group-hover:text-primary transition-colors duration-300">
                         {course.title}
                       </h2>
 
-
                       <div className="flex flex-wrap gap-4 text-muted-foreground">
                         <div className="flex items-center gap-2">
                           <Users className="w-4 h-4 text-primary" />
-                          <span>{course.enrollmentCount} students</span>
+                          {/* <span>{course.enrollmentCount || ""} students</span> */}
                         </div>
                         <div className="flex items-center gap-2">
                           <BookOpen className="w-4 h-4 text-primary" />
-                          <span>{course.chapterTotal} chapters</span>
+                          {/* <span>{course.chapterTotal} chapters</span> */}
                         </div>
                         <div className="flex items-center gap-2">
                           <Clock className="w-4 h-4 text-primary" />
-                          <span>{course.learnHours} hours</span>
+                          {/* <span>{course.learnHours} hours</span> */}
                         </div>
                       </div>
                     </div>
-
 
                     <div className="flex items-center gap-4 text-primary group-hover:translate-x-2 transition-transform duration-300">
                       <Button variant="default" size="lg" className="text-lg">
@@ -148,7 +145,6 @@ export default function CourseList() {
           </div>
         </section>
 
-
         <section className="space-y-8">
           <div className="flex items-center gap-3">
             <h2 className="text-3xl font-bold flex items-center gap-3">
@@ -156,7 +152,6 @@ export default function CourseList() {
               Coming Soon
             </h2>
           </div>
-
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {comingSoonCourses.map((course) => (
@@ -166,16 +161,17 @@ export default function CourseList() {
               >
                 <CardContent className="p-8">
                   <div className="block space-y-6">
-                    <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">
+                    <Badge
+                      variant="outline"
+                      className="bg-primary/10 text-primary border-primary/20"
+                    >
                       Coming Soon
                     </Badge>
-
 
                     <div className="space-y-3">
                       <h2 className="text-2xl font-bold text-foreground">
                         {course.title}
                       </h2>
-
 
                       <div className="flex flex-wrap gap-4 text-muted-foreground">
                         <div className="flex items-center gap-2">
@@ -188,7 +184,6 @@ export default function CourseList() {
                         </div>
                       </div>
                     </div>
-
 
                     <div className="flex items-center gap-2 text-primary">
                       Get notified when available
