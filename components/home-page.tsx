@@ -1,30 +1,37 @@
-"use client";
-
+"use client"
 import React from "react";
 import { motion, useScroll, useSpring } from "framer-motion";
-import { Terminal, Timer, ArrowRight, Code2, Sparkles } from "lucide-react";
+import {
+  BookOpen,
+  GraduationCap,
+  Lightbulb,
+  Rocket,
+  Star,
+  Clock,
+  Calendar,
+  Trophy
+} from "lucide-react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Cloud } from "@/components/cloud";
 import { formatDate } from "@/lib/format-date";
 
-interface Blog {
-  slug: string;
-  metadata: {
-    title: string;
-    publishedAt: string;
-    summary: string;
-    category: string;
-    featured?: boolean;
-  };
-  content: string;
+interface Course {
+  id: string;
+  title: string;
+  description: string;
+  level: string;
+  duration: string;
+  category: string;
+  startDate: string;
 }
 
 interface HomePageProps {
-  initialBlogs: Blog[];
+  featuredCourses: Course[];
+  upcomingCourses: Course[];
 }
 
-export default function HomePage({ initialBlogs }: HomePageProps) {
+export default function HomePage({ featuredCourses, upcomingCourses }: HomePageProps) {
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 60,
@@ -32,14 +39,11 @@ export default function HomePage({ initialBlogs }: HomePageProps) {
     restDelta: 0.001,
   });
 
-  const recentBlogs = initialBlogs.slice(0, 3);
-  const popularBlogs = initialBlogs.filter((blog) => blog.metadata.title);
-
   return (
     <>
       <Cloud position="top" className="z-10" />
       <motion.div
-        className="fixed top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-muted via-primary to-secondary origin-[0%] z-50"
+        className="fixed top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-purple-400 via-primary to-blue-400 origin-[0%] z-50"
         style={{ scaleX }}
       />
 
@@ -48,176 +52,196 @@ export default function HomePage({ initialBlogs }: HomePageProps) {
         animate={{ opacity: 1 }}
         className="relative min-h-screen bg-gradient-to-b from-background via-background/90 to-background"
       >
-        <div className="max-w-7xl mx-auto px-4 py-24">
-          <header className="space-y-12 mb-20">
+        <div className="max-w-7xl mx-auto px-4 py-16">
+          {/* Hero Section */}
+          <header className="space-y-8 mb-16">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="inline-flex items-center space-x-2 text-sm"
+              className="inline-flex items-center space-x-2"
             >
-              <Badge
-                variant="secondary"
-                className="flex items-center gap-2 px-4"
-              >
-                <Terminal className="w-4 h-4 text-primary" />
-                <span className="font-mono text-muted-foreground">
-                  <span className="text-primary">~/</span>thoughts-and-knowledge
-                </span>
+              <Badge variant="secondary" className="flex items-center gap-2 px-4">
+                <GraduationCap className="w-4 h-4 text-primary" />
+                <span className="font-mono text-primary">Your CS Journey Starts Here</span>
               </Badge>
             </motion.div>
 
-            <motion.h1
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
               className="space-y-6"
             >
-              <span className="block text-4xl sm:text-6xl font-bold tracking-wider bg-gradient-to-r from-foreground via-foreground/80 to-muted-foreground bg-clip-text text-transparent font-wotfard">
-                Thoughts, Stories, and
-                <br /> Technical Guides
-              </span>
-              <div className="flex items-center gap-4 text-lg sm:text-xl text-muted-foreground font-mono">
-                <Code2 className="w-5 h-5 text-primary" />
-                <span className="text-primary font-wotfard">
-                  Documenting the journey.
-                </span>
+              <h1 className="text-4xl sm:text-6xl font-bold tracking-wider bg-gradient-to-r from-purple-400 via-primary to-blue-400 bg-clip-text text-transparent">
+                Master Computer Science
+                <br />
+                One Step at a Time
+              </h1>
+              <p className="text-xl text-muted-foreground max-w-2xl">
+                Join thousands of 8th and 9th graders discovering the magic of coding through
+                interactive lessons, fun projects, and supportive community.
+              </p>
+              <div className="flex gap-4">
+                <Link href="/courses">
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    className="px-6 py-3 bg-primary text-primary-foreground rounded-lg font-semibold flex items-center gap-2"
+                  >
+                    Start Learning <Rocket className="w-4 h-4" />
+                  </motion.button>
+                </Link>
+                <Link href="/dashboard">
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    className="px-6 py-3 bg-secondary text-secondary-foreground rounded-lg font-semibold"
+                  >
+                    Go to Dashboard
+                  </motion.button>
+                </Link>
               </div>
-            </motion.h1>
+            </motion.div>
           </header>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
-            {/* Recent Posts Section */}
-            <Section
-              title="Recent Posts"
-              blogs={recentBlogs}
-              viewAllLink="/blogs"
-            />
+          {/* Featured Courses */}
+          <Section
+            title="Featured Courses"
+            icon={<Star className="w-6 h-6 text-yellow-400" />}
+          >
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {featuredCourses.map((course, i) => (
+                <CourseCard key={course.id} course={course} index={i} />
+              ))}
+            </div>
+          </Section>
 
-            {/* Popular Posts Section */}
-            <Section
-              title="Popular Posts"
-              blogs={popularBlogs}
-              renderBadge={false}
-            />
-          </div>
+          {/* Latest Updates */}
+          <Section
+            title="What's New"
+            icon={<Lightbulb className="w-6 h-6 text-primary" />}
+          >
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <UpdateCard
+                title="New Python Course Released!"
+                date="2025-01-05"
+                description="Master the basics of Python with our new interactive course designed specifically for beginners."
+                icon={<BookOpen className="w-5 h-5" />}
+              />
+              <UpdateCard
+                title="Weekend Coding Challenge"
+                date="2025-01-12"
+                description="Join our upcoming weekend challenge and build your first game using Scratch!"
+                icon={<Trophy className="w-5 h-5" />}
+              />
+            </div>
+          </Section>
 
-          {/* Coming Soon Section */}
-          <ComingSoonSection />
-
-          {/* All Posts Section */}
-          <Section title="All Posts" blogs={initialBlogs} />
+          {/* Learning Path */}
+          <Section
+            title="Your Learning Path"
+            icon={<Rocket className="w-6 h-6 text-primary" />}
+          >
+            <div className="relative flex flex-col md:flex-row gap-6 justify-between">
+              <PathStep
+                number={1}
+                title="Start with Basics"
+                description="Learn fundamental concepts through interactive lessons"
+              />
+              <PathStep
+                number={2}
+                title="Build Projects"
+                description="Apply your knowledge by creating real projects"
+              />
+              <PathStep
+                number={3}
+                title="Join Challenges"
+                description="Test your skills and compete with peers"
+              />
+            </div>
+          </Section>
         </div>
       </motion.main>
     </>
   );
 }
 
-function Section({
-  title,
-  blogs,
-  viewAllLink,
-  renderBadge = true,
-}: {
-  title: string;
-  blogs: Blog[];
-  viewAllLink?: string;
-  renderBadge?: boolean;
-}) {
+function Section({ title, icon, children }: { title: string; icon: React.ReactNode; children: React.ReactNode }) {
   return (
-    <section className="w-full">
-      <div className="flex items-center justify-between mb-8">
-        <h2 className="text-2xl font-bold text-foreground">{title}</h2>
-        {viewAllLink && (
-          <Link
-            href={viewAllLink}
-            className="text-primary hover:text-primary/80 transition-colors"
-          >
-            View all
-          </Link>
-        )}
+    <section className="mb-16">
+      <div className="flex items-center gap-3 mb-8">
+        <h2 className="text-2xl font-bold text-foreground flex items-center gap-2">
+          {icon}
+          {title}
+        </h2>
       </div>
-      <div className="grid gap-6">
-        {blogs.map((blog, i) => (
-          <motion.div
-            key={blog.slug}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.1 }}
-          >
-            <Link href={`/blogs/${blog.slug}`} className="group">
-              <article className="relative p-6 rounded-lg border border-border bg-card/30 backdrop-blur-sm hover:bg-card/50 hover:border-primary/50 transition-all">
-                <div className="flex items-center gap-4">
-                  {renderBadge && (
-                    <Badge
-                      variant="secondary"
-                      className="flex items-center gap-2"
-                    >
-                      {blog.metadata.category?.includes("code") ? (
-                        <Code2 className="w-4 h-4" />
-                      ) : (
-                        <Terminal className="w-4 h-4" />
-                      )}
-                      {blog.metadata.category || "Uncategorized"}
-                    </Badge>
-                  )}
-                  <div className="flex items-center text-sm text-muted-foreground">
-                    <Timer className="w-4 h-4 mr-1" />
-                    <span>{formatDate(blog.metadata.publishedAt)}</span>
-                  </div>
-                </div>
-                <div className="mt-4 space-y-2">
-                  <h2 className="text-xl font-semibold text-foreground">
-                    {blog.metadata.title}
-                  </h2>
-                  <p className="text-muted-foreground">
-                    {blog.metadata.summary}
-                  </p>
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground group-hover:text-primary transition-colors">
-                    Read article
-                    <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                  </div>
-                </div>
-              </article>
-            </Link>
-          </motion.div>
-        ))}
-      </div>
+      {children}
     </section>
   );
 }
 
-function ComingSoonSection() {
+function CourseCard({ course, index }: { course: Course; index: number }) {
   return (
-    <section className="w-full mb-16">
-      <div className="flex items-center gap-3 mb-8">
-        <h2 className="text-2xl font-bold text-foreground">Coming Soon</h2>
-        <Sparkles className="w-6 h-6 text-primary animate-pulse" />
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {[1, 2, 3].map((_, i) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.1 }}
-          >
-            <article className="relative p-6 rounded-lg border border-primary/20 bg-primary/5 backdrop-blur-sm h-full">
-              <Badge
-                variant="outline"
-                className="bg-primary/10 text-primary border-primary/20"
-              >
-                Coming Soon
-              </Badge>
-              <div className="mt-8 space-y-2">
-                <div className="h-6 w-3/4 bg-primary/10 rounded animate-pulse" />
-                <div className="h-4 w-full bg-primary/5 rounded animate-pulse" />
-                <div className="h-4 w-2/3 bg-primary/5 rounded animate-pulse" />
-              </div>
-            </article>
-          </motion.div>
-        ))}
-      </div>
-    </section>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.1 }}
+    >
+      <Link href={`/courses/${course.id}`}>
+        <article className="relative p-6 rounded-lg border border-border bg-card/30 backdrop-blur-sm hover:bg-card/50 hover:border-primary/50 transition-all h-full">
+          <Badge variant="secondary" className="mb-4">
+            {course.level}
+          </Badge>
+          <h3 className="text-xl font-semibold mb-2">{course.title}</h3>
+          <p className="text-muted-foreground mb-4">{course.description}</p>
+          <div className="flex items-center gap-4 text-sm text-muted-foreground">
+            <span className="flex items-center gap-1">
+              <Clock className="w-4 h-4" />
+              {course.duration}
+            </span>
+            <span className="flex items-center gap-1">
+              <Calendar className="w-4 h-4" />
+              {formatDate(course.startDate)}
+            </span>
+          </div>
+        </article>
+      </Link>
+    </motion.div>
   );
 }
+
+function UpdateCard({ title, date, description, icon }: { title: string; date: string; description: string; icon: React.ReactNode }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+    >
+      <article className="p-6 rounded-lg border border-border bg-card/30 backdrop-blur-sm">
+        <div className="flex items-center gap-2 mb-4">
+          {icon}
+          <Badge variant="secondary">{formatDate(date)}</Badge>
+        </div>
+        <h3 className="text-lg font-semibold mb-2">{title}</h3>
+        <p className="text-muted-foreground">{description}</p>
+      </article>
+    </motion.div>
+  );
+}
+
+function PathStep({ number, title, description }: { number: number; title: string; description: string }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="flex-1"
+    >
+      <div className="flex items-center gap-4 mb-4">
+        <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-bold">
+          {number}
+        </div>
+        <h3 className="text-lg font-semibold">{title}</h3>
+      </div>
+      <p className="text-muted-foreground">{description}</p>
+    </motion.div>
+  );
+}
+
