@@ -50,7 +50,7 @@ const comingSoonCourses: CourseProps[] = [
   },
   {
     slug: "app-inventors",
-    title: "App Inventors: Mobile Development Basics",
+    title: "App Inventors: Mobile Development Basics Your app on play store",
     enrollmentCount: 0,
     chapterTotal: 7,
     learnHours: 10,
@@ -119,15 +119,19 @@ export default async function CourseList() {
                       <div className="flex flex-wrap gap-4 text-muted-foreground">
                         <div className="flex items-center gap-2">
                           <Users className="w-4 h-4 text-primary" />
-                          {/* <span>{course.enrollmentCount || ""} students</span> */}
+                          <span>
+                            {(course.enrollmentCount as any) || "50"} students
+                          </span>
                         </div>
                         <div className="flex items-center gap-2">
                           <BookOpen className="w-4 h-4 text-primary" />
-                          {/* <span>{course.chapterTotal} chapters</span> */}
+                          <span>
+                            {(course.chapterTotal as any) || "10"} chapters
+                          </span>
                         </div>
                         <div className="flex items-center gap-2">
                           <Clock className="w-4 h-4 text-primary" />
-                          {/* <span>{course.learnHours} hours</span> */}
+                          <span>{(course.learnHours as any) || "8"} hours</span>
                         </div>
                       </div>
                     </div>
@@ -186,8 +190,8 @@ export default async function CourseList() {
                     </div>
 
                     <div className="flex items-center gap-2 text-primary">
-                      Get notified when available
-                      <ChevronRight className="w-4 h-4" />
+                      Stay tuned
+                      <RocketIcon className="w-4 h-4" />
                     </div>
                   </div>
                 </CardContent>

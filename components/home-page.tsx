@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React from "react";
 import { motion, useScroll, useSpring } from "framer-motion";
 import {
@@ -9,12 +9,13 @@ import {
   Star,
   Clock,
   Calendar,
-  Trophy
+  Trophy,
 } from "lucide-react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Cloud } from "@/components/cloud";
 import { formatDate } from "@/lib/format-date";
+import ProgressBar from "./progress-bar";
 
 interface Course {
   id: string;
@@ -31,22 +32,14 @@ interface HomePageProps {
   upcomingCourses: Course[];
 }
 
-export default function HomePage({ featuredCourses, upcomingCourses }: HomePageProps) {
-  const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, {
-    stiffness: 60,
-    damping: 20,
-    restDelta: 0.001,
-  });
-
+export default function HomePage({
+  featuredCourses,
+  upcomingCourses,
+}: HomePageProps) {
   return (
     <>
       <Cloud position="top" className="z-10" />
-      <motion.div
-        className="fixed top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-purple-400 via-primary to-blue-400 origin-[0%] z-50"
-        style={{ scaleX }}
-      />
-
+      <ProgressBar></ProgressBar>
       <motion.main
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -61,9 +54,14 @@ export default function HomePage({ featuredCourses, upcomingCourses }: HomePageP
               transition={{ delay: 0.2 }}
               className="inline-flex items-center space-x-2"
             >
-              <Badge variant="secondary" className="flex items-center gap-2 px-4">
+              <Badge
+                variant="secondary"
+                className="flex items-center gap-2 px-4"
+              >
                 <GraduationCap className="w-4 h-4 text-primary" />
-                <span className="font-mono text-primary">Your CS Journey Starts Here</span>
+                <span className="font-mono text-primary">
+                  Your CS Journey Starts Here
+                </span>
               </Badge>
             </motion.div>
 
@@ -73,14 +71,15 @@ export default function HomePage({ featuredCourses, upcomingCourses }: HomePageP
               transition={{ delay: 0.4 }}
               className="space-y-6"
             >
-              <h1 className="text-4xl sm:text-6xl font-bold tracking-wider bg-gradient-to-r from-purple-400 via-primary to-blue-400 bg-clip-text text-transparent">
+              <h1 className="text-4xl sm:text-6xl font-bold tracking-wider bg-gradient-to-r from-primary via-secondary-foreground to-primary bg-clip-text text-transparent">
                 Master Computer Science
                 <br />
                 One Step at a Time
               </h1>
               <p className="text-xl text-muted-foreground max-w-2xl">
-                Join thousands of 8th and 9th graders discovering the magic of coding through
-                interactive lessons, fun projects, and supportive community.
+                Join thousands of 8th and 9th graders discovering the magic of
+                coding through interactive lessons, fun projects, and supportive
+                community.
               </p>
               <div className="flex gap-4">
                 <Link href="/courses">
@@ -165,7 +164,15 @@ export default function HomePage({ featuredCourses, upcomingCourses }: HomePageP
   );
 }
 
-function Section({ title, icon, children }: { title: string; icon: React.ReactNode; children: React.ReactNode }) {
+function Section({
+  title,
+  icon,
+  children,
+}: {
+  title: string;
+  icon: React.ReactNode;
+  children: React.ReactNode;
+}) {
   return (
     <section className="mb-16">
       <div className="flex items-center gap-3 mb-8">
@@ -209,12 +216,19 @@ function CourseCard({ course, index }: { course: Course; index: number }) {
   );
 }
 
-function UpdateCard({ title, date, description, icon }: { title: string; date: string; description: string; icon: React.ReactNode }) {
+function UpdateCard({
+  title,
+  date,
+  description,
+  icon,
+}: {
+  title: string;
+  date: string;
+  description: string;
+  icon: React.ReactNode;
+}) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-    >
+    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
       <article className="p-6 rounded-lg border border-border bg-card/30 backdrop-blur-sm">
         <div className="flex items-center gap-2 mb-4">
           {icon}
@@ -227,7 +241,15 @@ function UpdateCard({ title, date, description, icon }: { title: string; date: s
   );
 }
 
-function PathStep({ number, title, description }: { number: number; title: string; description: string }) {
+function PathStep({
+  number,
+  title,
+  description,
+}: {
+  number: number;
+  title: string;
+  description: string;
+}) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -244,4 +266,3 @@ function PathStep({ number, title, description }: { number: number; title: strin
     </motion.div>
   );
 }
-
