@@ -4,9 +4,9 @@ import Link from "next/link";
 import { ModeToggle } from "./toggle-button";
 
 const navItems = [
-  { name: "Home", href: "/" },
-  { name: "Blog", href: "/blogs" },
-  { name: "About", href: "/about" },
+  { name: "Subjects", href: "/subjects" },
+  { name: "Courses", href: "/courses" },
+  { name: "My Progress", href: "/my-progress" },
 ];
 
 const Navbar = () => {
@@ -28,7 +28,7 @@ const Navbar = () => {
                 className="rounded-full"
               />
               <span className="text-lg font-semibold tracking-tight">
-                vdsidously
+                Perspective Coding
               </span>
             </Link>
 
