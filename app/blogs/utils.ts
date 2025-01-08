@@ -12,6 +12,8 @@ async function getMDXfiles(dir: string) {
 // Read the content of the files
 async function readMDXfile(filePath: string) {
   const rawContent = await fs.readFile(filePath, "utf8");
+  console.log(rawContent);
+
   return matter(rawContent);
 }
 export type BlogProps = {
