@@ -1,6 +1,5 @@
 import { prisma } from "@/lib/prisma";
 import React from "react";
-import { formatDate } from "@/lib/format-date";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
