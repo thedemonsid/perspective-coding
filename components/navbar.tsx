@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { AirVent, Book, LucideAirVent, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { ModeToggle } from "./toggle-button";
 
 const navItems = [

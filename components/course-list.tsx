@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import { Card, CardContent } from "./ui/card";
 import { Badge } from "./ui/badge";
@@ -22,23 +23,6 @@ interface CourseProps {
   chapterTotal: number;
   learnHours: number;
 }
-
-const hotCourses: CourseProps[] = [
-  {
-    slug: "python-adventure",
-    title: "Python Adventure: Your First Coding Journey",
-    enrollmentCount: 120,
-    chapterTotal: 10,
-    learnHours: 15,
-  },
-  {
-    slug: "web-wizards",
-    title: "Web Wizards: HTML & CSS and JS Basics to create fun on web",
-    enrollmentCount: 95,
-    chapterTotal: 8,
-    learnHours: 12,
-  },
-];
 
 const comingSoonCourses: CourseProps[] = [
   {

@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { motion, useScroll, useSpring } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   BookOpen,
   GraduationCap,
@@ -32,10 +32,7 @@ interface HomePageProps {
   upcomingCourses: Course[];
 }
 
-export default function HomePage({
-  featuredCourses,
-  upcomingCourses,
-}: HomePageProps) {
+export default function HomePage({ featuredCourses }: HomePageProps) {
   return (
     <>
       <Cloud position="top" className="z-10" />
@@ -121,15 +118,15 @@ export default function HomePage({
           >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <UpdateCard
-                title="New Python Course Released!"
+                title="New and Improved Python Course Released! Now with more interactive lessons and fun projects."
                 date="2025-01-05"
                 description="Master the basics of Python with our new interactive course designed specifically for beginners."
                 icon={<BookOpen className="w-5 h-5" />}
               />
               <UpdateCard
-                title="Weekend Coding Challenge"
+                title="Weekend Coding Challenge #1: Build Your First Game with Scratch! compete with peers and win exciting badges."
                 date="2025-01-12"
-                description="Join our upcoming weekend challenge and build your first game using Scratch!"
+                description="Join our upcoming weekend challenge and build your first game using Scratch!. Winners will receive exciting badges and rewards."
                 icon={<Trophy className="w-5 h-5" />}
               />
             </div>
@@ -137,7 +134,7 @@ export default function HomePage({
 
           {/* Learning Path */}
           <Section
-            title="Your Learning Path"
+            title="Our Learning Philosophy"
             icon={<Rocket className="w-6 h-6 text-primary" />}
           >
             <div className="relative flex flex-col md:flex-row gap-6 justify-between">
