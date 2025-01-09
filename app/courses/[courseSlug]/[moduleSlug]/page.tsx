@@ -17,7 +17,8 @@ const Course = async ({
   if (!course) {
     notFound();
   }
-  const module = await prisma.module.findUnique({
+  //! Using name module1 because module is a reserved word
+  const module1 = await prisma.module.findUnique({
     where: {
       slug_courseId: {
         slug: moduleSlug,
@@ -29,20 +30,20 @@ const Course = async ({
     },
   });
 
-  if (!module) {
+  if (!module1) {
     notFound();
   }
 
   return (
     <div className="max-w-4xl mx-auto p-6 font-wotfard mt-12">
-      <h1 className="text-4xl font-bold mb-4">{module.name}</h1>
-      <p className="text-gray-500 mb-2">{module.description}</p>
+      <h1 className="text-4xl font-bold mb-4">{module1.name}</h1>
+      <p className="text-gray-500 mb-2">{module1.description}</p>
       <p className="text-gray-500 mb-2">
-        PublishedAt: {module.createdAt.toLocaleDateString()}
+        PublishedAt: {module1.createdAt.toLocaleDateString()}
       </p>
       <h2 className="text-2xl font-bold mt-6 mb-4">Lessons</h2>
       <ul className="list-disc list-inside">
-        {module.lessons.map((lesson) => (
+        {module1.lessons.map((lesson) => (
           <li key={lesson.id} className="mb-2">
             <Link
               className="text-blue-500 hover:underline"
