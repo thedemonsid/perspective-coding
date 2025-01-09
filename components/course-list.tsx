@@ -88,7 +88,7 @@ export default async function CourseList() {
               >
                 <CardContent className="p-8">
                   <Link
-                    href={`/courses/${course.id}`}
+                    href={`/courses/${course.slug}`}
                     className="block space-y-6"
                   >
                     <Badge className="bg-primary/10 text-primary hover:bg-primary/20 transition-colors">
@@ -97,7 +97,7 @@ export default async function CourseList() {
 
                     <div className="space-y-3">
                       <h2 className="text-2xl font-bold text-foreground group-hover:text-primary transition-colors duration-300">
-                        {course.title}
+                        {course.name}
                       </h2>
 
                       <div className="flex flex-wrap gap-4 text-muted-foreground">

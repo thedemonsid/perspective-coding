@@ -2,122 +2,179 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 async function main() {
-  await prisma.course.createMany({
+  // Create courses
+  const courses = await prisma.course.createMany({
     data: [
       {
-        title: "Introduction to Markdown",
+        name: "Introduction to Markdown",
+        slug: "introduction-to-markdown",
         description:
           "Learn how to use MDX to create dynamic content with JSX and Markdown",
       },
       {
-        title: "React Fundamentals",
+        name: "React Fundamentals",
+        slug: "react-fundamentals",
         description: "Master the core concepts of React development",
       },
       {
-        title: "Next.js Advanced Patterns",
+        name: "Next.js Advanced Patterns",
+        slug: "nextjs-advanced-patterns",
         description: "Deep dive into Next.js framework features and patterns",
       },
       {
-        title: "TypeScript for JavaScript Developers",
+        name: "TypeScript for JavaScript Developers",
+        slug: "typescript-for-javascript-developers",
         description:
           "Learn TypeScript to write more maintainable JavaScript code",
       },
       {
-        title: "Full-Stack Development with Prisma",
-        description: "Build modern applications with Prisma ORM",
+        name: "Full-Stack Development with Prisma",
+        slug: "full-stack-development-with-prisma",
+        description: "Learn how to use Prisma for full-stack development",
       },
     ],
   });
 
-  // Create chapters after courses are created
-  const courses = await prisma.course.findMany();
+  // Create modules for the first course
+  const course = await prisma.course.findUnique({
+    where: { slug: "introduction-to-markdown" },
+  });
 
-  for (const course of courses) {
-    await prisma.chapter.createMany({
-      data: [
-        {
-          title: "Chapter 1",
-          content: `---
-title: Introduction to ${course.title}
-publishedAt: "2024-03-20"
-summary: Learn the basics
-category: Web Development
-author: Course Team
+  const modules = await prisma.module.createMany({
+    data: [
+      {
+        name: "Getting Started with Markdown",
+        slug: "getting-started-with-markdown",
+        description: "Introduction to Markdown syntax and usage",
+        courseId: course.id,
+        index: 1,
+        isFree: true,
+      },
+      {
+        name: "Advanced Markdown Techniques",
+        slug: "advanced-markdown-techniques",
+        description: "Learn advanced Markdown techniques",
+        courseId: course.id,
+        index: 2,
+        isFree: false,
+      },
+    ],
+  });
+
+  // Create lessons for the first module
+  const module = await prisma.module.findUnique({
+    where: {
+      slug_courseId: {
+        slug: "getting-started-with-markdown",
+        courseId: course.id,
+      },
+    },
+  });
+  const mdxContent = `
+---
+title : Hello World
+publishedAt: 2021-07-10
+summary: "This is a Demo Blog for the testing purposes"
+category: "Hello"
+author: "the_demon_sid"
 ---
 
-Dive into the basics of ${course.title} and get started on your learning journey!`,
-          courseId: course.id,
-        },
-        {
-          title: "Chapter 2",
-          content: `---
-title: Advanced Concepts in ${course.title}
-publishedAt: "2024-03-27"
-summary: Level up your skills
-category: Web Development
-author: Course Team
----
+# Hello World
 
-Take your understanding of ${course.title} to the next level with advanced topics.`,
-          courseId: course.id,
-        },
-        {
-          title: "Chapter 3",
-          content: `---
-title: Practical Use Cases of ${course.title}
-publishedAt: "2024-04-03"
-summary: Apply what you learn
-category: Web Development
-author: Course Team
----
+A checkbox is a square box that can be activated or deactivated when ticked.
+Use checkboxes to select one or more options from a list of choices.
 
-Discover how ${course.title} is used in real-world projects.`,
-          courseId: course.id,
-        },
-        {
-          title: "Chapter 4",
-          content: `---
-title: Common Pitfalls in ${course.title}
-publishedAt: "2024-04-10"
-summary: Avoid the common mistakes
-category: Web Development
-author: Course Team
----
+<MyComponent/>
+\`\`\`javascript
+import { Checkbox } from '@react-spectrum/checkbox';
 
-Learn how to identify and avoid common mistakes in ${course.title}.`,
-          courseId: course.id,
-        },
-        {
-          title: "Chapter 5",
-          content: `---
-title: Tools and Extensions for ${course.title}
-publishedAt: "2024-04-17"
-summary: Enhance your productivity
-category: Web Development
-author: Course Team
----
+function Example() {
+  return <Checkbox>Label</Checkbox>;
+}
+\`\`\`
+\`\`\`jsx
+<Checkbox>Label</Checkbox>
+\`\`\`
+\`\`\`html
+<input type="checkbox" id="checkbox" name="checkbox" value="checkbox">
+<label for="checkbox">Label</label>
+\`\`\`
 
-Explore the best tools and extensions to maximize your productivity in ${course.title}.`,
-          courseId: course.id,
-        },
-        {
-          title: "Chapter 6",
-          content: `---
-title: Mastery of ${course.title}
-publishedAt: "2024-04-24"
-summary: Become an expert
-category: Web Development
-author: Course Team
----
+A checkbox is a square box that can be activated or deactivated when ticked.
 
-Capstone content to help you become a true expert in ${course.title}.`,
-          courseId: course.id,
-        },
-      ],
-    });
-  }
+Use checkboxes to select one or more options from a list of choices.
 
-  console.log("Database has been seeded. 🌱");
+\`\`\`javascript
+import { Checkbox } from '@react-spectrum/checkbox';
+
+function Example() {
+  return <Checkbox>Label</Checkbox>;
+}
+\`\`\`
+\`\`\`jsx
+<Checkbox>Label</Checkbox>
+\`\`\`
+\`\`\`html
+<input type="checkbox" id="checkbox" name="checkboxconst mdxContent
+# Hello World
+
+A checkbox is a square box that can be activated or deactivated when ticked.
+Use checkboxes to select one or more options from a list of choices.
+
+<MyComponent/>
+\`\`\`javascript
+import { Checkbox } from '@react-spectrum/checkbox';
+
+function Example() {
+  return <Checkbox>Label</Checkbox>;
+}
+\`\`\`
+\`\`\`jsx
+<Checkbox>Label</Checkbox>
+\`\`\`
+\`\`\`html
+<input type="checkbox" id="checkbox" name="checkbox" value="checkbox">
+<label for="checkbox">Label</label>
+\`\`\`
+
+A checkbox is a square box that can be activated or deactivated when ticked.
+
+Use checkboxes to select one or more options from a list of choices.
+
+\`\`\`javascript
+import { Checkbox } from '@react-spectrum/checkbox';
+
+function Example() {
+  return <Checkbox>Label</Checkbox>;
+}
+\`\`\`
+\`\`\`jsx
+<Checkbox>Label</Checkbox>
+\`\`\`
+\`\`\`html
+<input type="checkbox" id="checkbox" name="checkbox`;
+  const lessons = await prisma.lesson.createMany({
+    data: [
+      {
+        name: "Introduction to Markdown",
+        slug: "introduction-to-markdown",
+        description: "Learn the basics of Markdown",
+        content: mdxContent,
+        moduleId: module.id,
+        index: 1,
+      },
+      {
+        name: "Markdown Syntax",
+        slug: "markdown-syntax",
+        description: "Learn the syntax of Markdown",
+        content: mdxContent,
+        moduleId: module.id,
+        index: 2,
+      },
+    ],
+  });
+
+  console.log("Seeding completed");
 }
 
 main()

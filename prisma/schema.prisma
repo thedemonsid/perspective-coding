@@ -14,23 +14,61 @@ datasource db {
 }
 
 model Course {
-  id          String    @id @default(cuid())
-  title       String    @unique
-  description String?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  Chapter     Chapter[]
+  id String @id @default(cuid())
+
+  name        String  @unique
+  slug        String  @unique
+  description String
+  image       String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  modules Module[]
 
   @@map("courses")
 }
 
-model Chapter {
-  id       String @id @default(cuid())
-  index    Int    @default(0)
-  title    String
-  content  String
-  course   Course @relation(fields: [courseId], references: [id])
-  courseId String
+model Module {
+  id String @id @default(cuid())
 
-  @@map("chapters")
+  name        String
+  slug        String
+  description String
+  image       String?
+  index       Int
+  isFree      Boolean @default(false)
+
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  lessons Lesson[]
+
+  @@unique([slug, courseId]) //* Ensure slug + courseId is unique
+  @@index([courseId])
+  @@map("modules")
+}
+
+model Lesson {
+  id String @id @default(cuid())
+
+  name        String
+  slug        String
+  description String
+  image       String?
+  content     String
+  index       Int
+
+  moduleId String
+  module   Module @relation(fields: [moduleId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([slug, moduleId]) //* Ensure slug + moduleId is unique
+  @@index([moduleId])
+  @@map("lessons")
 }

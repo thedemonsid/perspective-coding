@@ -9,18 +9,22 @@ import React from "react";
 const Chapter = async ({
   params,
 }: {
-  params: Promise<{ chapterSlug: string }>;
+  params: Promise<{
+    courseSlug: string;
+    moduleSlug: string;
+    lessonId: string;
+  }>;
 }) => {
-  const { chapterSlug } = await params;
-  const chapter = await prisma.chapter.findUnique({
+  const { lessonId } = await params;
+  const lesson = await prisma.lesson.findUnique({
     where: {
-      id: chapterSlug,
+      id: lessonId,
     },
   });
-  if (!chapter) {
+  if (!lesson) {
     notFound();
   }
-  const { metadata, content } = parseMDXContent(chapter.content);
+  const { metadata, content } = parseMDXContent(lesson.content);
 
   const blog = { metadata, content };
   return (

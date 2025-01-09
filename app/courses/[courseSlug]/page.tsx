@@ -11,10 +11,10 @@ const Course = async ({
   const { courseSlug } = await params;
   const course = await prisma.course.findUnique({
     where: {
-      id: courseSlug,
+      slug: courseSlug,
     },
     include: {
-      Chapter: true,
+      modules: true,
     },
   });
 
@@ -24,20 +24,20 @@ const Course = async ({
 
   return (
     <div className="max-w-4xl mx-auto p-6 font-wotfard mt-12">
-      <h1 className="text-4xl font-bold mb-4">{course.title}</h1>
+      <h1 className="text-4xl font-bold mb-4">{course.name}</h1>
       <p className="text-gray-500 mb-2">{course.description}</p>
       <p className="text-gray-500 mb-2">
         PublishedAt: {course.createdAt.toLocaleDateString()}
       </p>
-      <h2 className="text-2xl font-bold mt-6 mb-4">Chapters</h2>
+      <h2 className="text-2xl font-bold mt-6 mb-4">Modules</h2>
       <ul className="list-disc list-inside">
-        {course.Chapter.map((chapter) => (
-          <li key={chapter.id} className="mb-2">
+        {course.modules.map((module) => (
+          <li key={module.id} className="mb-2">
             <Link
               className="text-blue-500 hover:underline"
-              href={`/courses/${courseSlug}/${chapter.id}`}
+              href={`/courses/${courseSlug}/${module.slug}`}
             >
-              {chapter.title}
+              {module.name}
             </Link>
           </li>
         ))}
