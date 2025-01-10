@@ -3,6 +3,7 @@
 import { useTheme } from "next-themes";
 import { Button } from "../ui/button";
 import React, { useEffect } from "react";
+import { signIn } from "next-auth/react";
 
 export const Social = () => {
   const theme = useTheme();
@@ -17,7 +18,9 @@ export const Social = () => {
         size={"lg"}
         className="w-full"
         variant={"outline"}
-        onClick={() => {}}
+        onClick={() => {
+          signIn("github");
+        }}
       >
         {isDark ? (
           <GithubIconDark></GithubIconDark>
@@ -29,7 +32,9 @@ export const Social = () => {
         size={"lg"}
         className="w-full"
         variant={"outline"}
-        onClick={() => {}}
+        onClick={() => {
+          signIn("google");
+        }}
       >
         <GoogleIcon></GoogleIcon>
       </Button>

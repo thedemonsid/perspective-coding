@@ -37,7 +37,36 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   session: {
     strategy: "jwt",
   },
+  pages: {
+    signIn: "/auth/login",
+    error: "/auth/error",
+  },
+  events: {
+    async linkAccount({ user, account }) {
+      if (account.provider === "google" || account.provider === "github") {
+        await prisma.user.update({
+          where: {
+            id: user.id,
+          },
+          data: {
+            emailVerified: new Date(),
+          },
+        });
+      }
+    },
+  },
   callbacks: {
+    async signIn({ user }) {
+      // if (!user.id) {
+      //   return false;
+      // }
+      // const existingUser = await getUserById(user.id);
+
+      // if (!existingUser || !existingUser.emailVerified) {
+      //   return false;
+      // }
+      return true;
+    },
     async jwt({ token }) {
       if (!token.sub) {
         return token;

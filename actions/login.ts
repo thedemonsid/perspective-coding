@@ -31,10 +31,22 @@ export async function login(values: z.infer<typeof LoginSchema>) {
             message: "Invalid credentials",
             errors: error.message,
           };
+        case "AccessDenied":
+          return {
+            success: false,
+            message: "Email not verified",
+            errors: error.message,
+          };
+        case "OAuthAccountNotLinked":
+          return {
+            success: false,
+            message: "Account Already Exists with this email",
+            errors: error.message,
+          };
         default:
           return {
             success: false,
-            message: "Unknown error",
+            message: error.message,
             errors: error.message,
           };
       }
