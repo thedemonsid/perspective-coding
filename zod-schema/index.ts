@@ -1,21 +1,12 @@
 import * as z from "zod";
 
-export const BlogSchema = z.object({
-  id: z.string().cuid().optional(),
-  title: z.string(),
-  description: z.string(),
-  author: z.string(),
-  content: z.string(),
-  createdAt: z.date().optional(),
-  updatedAt: z.date().optional(),
-  usersId: z.string().cuid().optional(),
+export const LoginSchema = z.object({
+  email: z.string().email("Invalid email address"),
+  password: z.string().min(1, "Password is required"),
 });
 
-export const UserSchema = z.object({
-  id: z.string().cuid().optional(),
-  name: z.string(),
+export const RegisterSchema = z.object({
   email: z.string().email(),
-  createdAt: z.date().optional(),
-  updatedAt: z.date().optional(),
-  blogs: z.array(BlogSchema).optional(),
+  password: z.string().min(6),
+  username: z.string().min(3),
 });
