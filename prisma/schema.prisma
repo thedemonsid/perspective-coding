@@ -74,9 +74,15 @@ model Lesson {
 }
 
 //! User Authentication
+enum UserRole {
+  ADMIN
+  USER
+}
+
 model User {
   id            String    @id @default(cuid())
   name          String?
+  role          UserRole  @default(USER)
   email         String    @unique
   emailVerified DateTime?
   password      String?
