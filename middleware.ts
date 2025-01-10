@@ -14,9 +14,12 @@ export default auth((req) => {
   const isLoggedIn = !!req.auth;
 
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
-  const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
+  const isPublicRoute = publicRoutes.some(route => {
+    // Convert the route to a regex pattern
+    const regex = new RegExp(`^${route.replace(/\[.*?\]/g, "[^/]+")}$`);
+    return regex.test(nextUrl.pathname);
+  });
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
-
   if (isApiAuthRoute) {
     return;
   }
@@ -31,7 +34,6 @@ export default auth((req) => {
   if (!isLoggedIn && !isPublicRoute) {
     return Response.redirect(new URL("/auth/login", nextUrl));
   }
-
   return;
 });
 

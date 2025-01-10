@@ -4,13 +4,16 @@ import Image from "next/image";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { ModeToggle } from "./toggle-button";
+import { LogoutButton } from "./auth/logout-button";
+import { LoginButton } from "./auth/login-button";
+import { Button } from "./ui/button";
 
 const navItems = [
   { name: "Courses", href: "/courses" },
   { name: "My Progress", href: "/my-progress" },
 ];
 
-const Navbar = () => {
+const Navbar = ({ session }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -48,6 +51,16 @@ const Navbar = () => {
                 {item.name}
               </Link>
             ))}
+            {session && (
+              <LogoutButton>
+                <Button>Log Out</Button>
+              </LogoutButton>
+            )}
+            {!session && (
+              <LoginButton>
+                <Button>Log In</Button>
+              </LoginButton>
+            )}
             <ModeToggle />
           </div>
 
@@ -77,6 +90,16 @@ const Navbar = () => {
                   {item.name}
                 </Link>
               ))}
+              {session && (
+                <LogoutButton>
+                  <Button>Log Out</Button>
+                </LogoutButton>
+              )}
+              {!session && (
+                <LoginButton>
+                  <Button>Log In</Button>
+                </LoginButton>
+              )}
             </div>
           </div>
         )}

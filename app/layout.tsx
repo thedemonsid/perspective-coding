@@ -3,6 +3,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 import NavBar from "@/components/navbar";
 import Footer from "@/components/footer";
+import { auth } from "@/auth";
 
 export const metadata: Metadata = {
   title: "Vdsidiously",
@@ -13,16 +14,19 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await auth();
+  console.log(session);
+
   return (
     <html lang="en" suppressHydrationWarning className="scroll-smooth">
       <body className={`antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="system">
-          <NavBar></NavBar>
+          <NavBar session={session}></NavBar>
           {children}
           <Footer></Footer>
         </ThemeProvider>
