@@ -14,6 +14,8 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
+import { FormError } from "./form-error";
+import { FormSuccess } from "./form-success";
 export const LoginForm = () => {
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
@@ -78,7 +80,11 @@ export const LoginForm = () => {
               )}
             />
           </div>
-          <Button type="submit" className="w-full">Login</Button>
+          <FormError message=""></FormError>
+          <FormSuccess message=""></FormSuccess>
+          <Button type="submit" className="w-full">
+            Login
+          </Button>
         </form>
       </Form>
     </CardWrapper>
