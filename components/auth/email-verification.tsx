@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { verifyEmail } from "@/actions/email-verification";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
+import { FormError } from "./form-error";
 
 const EmailVerificationPage = () => {
   const { toast } = useToast();
@@ -44,7 +45,7 @@ const EmailVerificationPage = () => {
     >
       <div className="flex flex-col items-center gap-6">
         {error.length > 0 ? (
-          <p className="test-center text-destructive"> {error}</p>
+          <FormError message={error}></FormError>
         ) : (
           <div className="text-center">
             <p>We are verifying your email address. Please wait a moment.</p>
