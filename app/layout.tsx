@@ -4,6 +4,7 @@ import "./globals.css";
 import NavBar from "@/components/navbar";
 import Footer from "@/components/footer";
 import { auth } from "@/auth";
+import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
   title: "Vdsidiously",
@@ -28,6 +29,7 @@ export default async function RootLayout({
           <NavBar session={session}></NavBar>
           {children}
           <Footer></Footer>
+          <Toaster></Toaster>
         </ThemeProvider>
       </body>
     </html>

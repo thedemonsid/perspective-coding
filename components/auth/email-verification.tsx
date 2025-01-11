@@ -1,21 +1,37 @@
 "use client";
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { CardWrapper } from "./card-wrapper";
 import { useSearchParams } from "next/navigation";
 import { verifyEmail } from "@/actions/email-verification";
+import { useRouter } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
 
 const EmailVerificationPage = () => {
+  const { toast } = useToast();
+  const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
   const email = searchParams.get("email");
+  const [error, setError] = useState("");
   console.log("Token", token);
   console.log("Email", email);
+
   const onSubmit = useCallback(async () => {
     if (token && email) {
       const response = await verifyEmail({ token, email });
       console.log("Verification response", response);
+      if (response.success) {
+        toast({
+          title: "Email Verified",
+          description: "Your email has been successfully verified.",
+          className: "bg-green-100 text-foreground",
+        });
+        router.push("/auth/login");
+      } else {
+        setError(response.message);
+      }
     }
-    return;
+    setError("Invalid token or email");
   }, [token, email]);
   useEffect(() => {
     onSubmit();
@@ -27,10 +43,14 @@ const EmailVerificationPage = () => {
       backButtonHref="/auth/login"
     >
       <div className="flex flex-col items-center gap-6">
-        <p className="text-center">
-          We are verifying your email address. Please wait a moment.
-        </p>
-        <SpinLoader></SpinLoader>
+        {error.length > 0 ? (
+          <p className="test-center text-destructive"> {error}</p>
+        ) : (
+          <div className="text-center">
+            <p>We are verifying your email address. Please wait a moment.</p>
+            <SpinLoader />
+          </div>
+        )}
       </div>
     </CardWrapper>
   );
