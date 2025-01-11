@@ -5,6 +5,8 @@ import { RegisterSchema } from "@/zod-schema";
 import * as z from "zod";
 import bcryptjs from "bcryptjs";
 import { getUserByEmail } from "@/lib/db/user";
+import { generateVerificationToken } from "@/lib/db/verification-token";
+import { sendVerificationEmail } from "./mail";
 export async function register(values: z.infer<typeof RegisterSchema>) {
   const parsedValues = RegisterSchema.safeParse(values);
   if (!parsedValues.success) {
@@ -37,6 +39,17 @@ export async function register(values: z.infer<typeof RegisterSchema>) {
     };
   }
   // TODO: Send email verification
+  const token = await generateVerificationToken(newUser.email);
+  console.log("Verification token", token);
+  try {
+    await sendVerificationEmail(newUser.email, token as string);
+  } catch (error) {
+    console.error("Failed to send email", error);
+    return {
+      success: false,
+      message: "Failed to send email",
+    };
+  }
   return {
     success: true,
     message: "Email sent for verification",

@@ -1,11 +1,14 @@
 "use server";
 
 import { signIn } from "@/auth";
+import { getUserByEmail } from "@/lib/db/user";
+import { generateVerificationToken } from "@/lib/db/verification-token";
 import { DEFAULT_LOGIN_REDIRECT } from "@/lib/routes";
 import { LoginSchema } from "@/zod-schema";
 import { AuthError } from "next-auth";
 import * as z from "zod";
-
+import { sendVerificationEmail } from "./mail";
+import bcryptjs from "bcryptjs";
 export async function login(values: z.infer<typeof LoginSchema>) {
   const parsedValues = LoginSchema.safeParse(values);
   if (!parsedValues.success) {
@@ -16,6 +19,41 @@ export async function login(values: z.infer<typeof LoginSchema>) {
     };
   }
   const { email, password } = parsedValues.data;
+  const existingUser = await getUserByEmail(email);
+  if (!existingUser || !existingUser.email || !existingUser.password) {
+    return {
+      success: false,
+      message: "User not found",
+    };
+  }
+  const isPasswordValid = await bcryptjs.compare(
+    password,
+    existingUser.password
+  );
+  if (!isPasswordValid) {
+    return {
+      success: false,
+      message: "Invalid credentials",
+    };
+  }
+  if (existingUser.emailVerified === null) {
+    try {
+      const token = await generateVerificationToken(email);
+      console.log("Verification token", token);
+      const response = await sendVerificationEmail(email, token as string);
+      console.log("Email response", response);
+      return {
+        success: false,
+        message: "Email not verified, new verification token sent",
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: "Failed to generate verification token",
+      };
+    }
+  }
+
   try {
     await signIn("credentials", {
       email,

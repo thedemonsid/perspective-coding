@@ -14,7 +14,7 @@ export const publicRoutes = ["/", "/about", "/courses", "/courses/[courseId]"];
  * This array contains the paths for the login and register routes
  * used in the authentication process.
  */
-export const authRoutes = ["/auth/login", "/auth/register", "/auth/error"];
+export const authRoutes = ["/auth/login", "/auth/register", "/auth/error","/auth/verify-email"];
 
 /**
  * The prefix for API authentication routes.
