@@ -7,11 +7,35 @@ import { ModeToggle } from "./toggle-button";
 import { LogoutButton } from "./auth/logout-button";
 import { LoginButton } from "./auth/login-button";
 import { Button } from "./ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
+import { LogOut } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
-const navItems = [
-  { name: "Courses", href: "/courses" },
-  { name: "My Progress", href: "/my-progress" },
-];
+const navItems = [{ name: "Courses", href: "/courses" }];
+
+const UserMenu = ({ session }) => (
+  <DropdownMenu>
+    <DropdownMenuTrigger asChild>
+      <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+        <Avatar className="h-8 w-8">
+          <AvatarImage src={session?.Avatar} alt={session?.user?.name} />
+          <AvatarFallback>{session?.user?.name?.[0]}</AvatarFallback>
+        </Avatar>
+      </Button>
+    </DropdownMenuTrigger>
+    <DropdownMenuContent className="w-40" align="end" forceMount>
+      <DropdownMenuItem className="text-red-600">
+        <LogOut className="mr-2 h-4 w-4" />
+        <LogoutButton>Logout</LogoutButton>
+      </DropdownMenuItem>
+    </DropdownMenuContent>
+  </DropdownMenu>
+);
 
 const Navbar = ({ session }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -51,12 +75,9 @@ const Navbar = ({ session }) => {
                 {item.name}
               </Link>
             ))}
-            {session && (
-              <LogoutButton>
-                <Button>Log Out</Button>
-              </LogoutButton>
-            )}
-            {!session && (
+            {session ? (
+              <UserMenu session={session} />
+            ) : (
               <LoginButton>
                 <Button>Log In</Button>
               </LoginButton>
@@ -67,6 +88,7 @@ const Navbar = ({ session }) => {
           {/* Mobile menu button */}
           <div className="md:hidden flex items-center">
             <ModeToggle />
+            {session && <UserMenu session={session} />}
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="ml-2 p-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
@@ -90,14 +112,9 @@ const Navbar = ({ session }) => {
                   {item.name}
                 </Link>
               ))}
-              {session && (
-                <LogoutButton>
-                  <Button>Log Out</Button>
-                </LogoutButton>
-              )}
               {!session && (
                 <LoginButton>
-                  <Button>Log In</Button>
+                  <Button className="w-full">Log In</Button>
                 </LoginButton>
               )}
             </div>

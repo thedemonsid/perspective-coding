@@ -1,41 +1,23 @@
 "use client";
 import React, { useTransition } from "react";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { CreditCard, Tag, Star } from "lucide-react";
-
-interface PaymentCardProps {
-  paymentAmount: number;
-  discountedPercentage: number;
-  discountedAmount: number;
-  specialCardBenefits: string;
-  discountDetails: string;
-  professionalPlanDetails: string;
-}
+import { useToast } from "@/hooks/use-toast";
 import Script from "next/script";
 import { createOrder } from "@/actions/payment";
-import { useToast } from "@/hooks/use-toast";
 declare global {
   interface Window {
     Razorpay: any;
   }
 }
-const PaymentCard: React.FC<PaymentCardProps> = ({
-  paymentAmount,
-  discountedPercentage,
-  discountedAmount,
-  specialCardBenefits,
-  discountDetails,
-  professionalPlanDetails,
-}) => {
+
+interface PaymentCardProps {
+  paymentAmount: number;
+}
+
+const PaymentCard: React.FC<PaymentCardProps> = ({ paymentAmount }) => {
   const toast = useToast();
   const [isPending, startTransition] = useTransition();
+
   const handlePayment = () => {
     startTransition(async () => {
       try {
@@ -80,61 +62,62 @@ const PaymentCard: React.FC<PaymentCardProps> = ({
       }
     });
   };
+
   return (
-    <div className="flex justify-center items-center h-fit bg-gray-100 min-w-xl">
-      <Script src="https://checkout.razorpay.com/v1/checkout.js" /> {/* */}
-      <Card className="max-w-md w-full bg-white shadow-lg rounded-lg overflow-hidden">
-        <CardHeader className="bg-blue-500 text-white p-4">
-          <CardTitle className="flex items-center">
-            <CreditCard className="mr-2" />
-            Payment Card
-          </CardTitle>
-          <CardDescription>Special offers and discounts</CardDescription>
-        </CardHeader>
-        <CardContent className="p-4">
-          <div className="mb-4">
-            <h3 className="text-lg font-semibold text-gray-800 flex items-center">
-              <Star className="mr-2 text-yellow-500" />
-              Special Card
-            </h3>
-            <p className="text-gray-600">{specialCardBenefits}</p>
-          </div>
-          <div className="mb-4">
-            <h3 className="text-lg font-semibold text-gray-800 flex items-center">
-              <Tag className="mr-2 text-green-500" />
-              Discounts
-            </h3>
-            <p className="text-gray-600">{discountDetails}</p>
-            <p className="text-gray-600">
-              Discounted Percentage: {discountedPercentage}%
-            </p>
-            <p className="text-gray-600">
-              Discounted Amount: ₹{discountedAmount}
-            </p>
-          </div>
-          <div className="mb-4">
-            <h3 className="text-lg font-semibold text-gray-800 flex items-center">
-              <Star className="mr-2 text-blue-500" />
-              Professional Plan
-            </h3>
-            <p className="text-gray-600">{professionalPlanDetails}</p>
-          </div>
-          <div className="mb-4">
-            <h3 className="text-lg font-semibold text-gray-800 flex items-center">
-              <CreditCard className="mr-2 text-red-500" />
-              Payment Amount
-            </h3>
-            <p className="text-gray-600">₹{paymentAmount}</p>
-          </div>
-          <Button
-            className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
-            onClick={handlePayment}
-            disabled={isPending}
-          >
-            Apply Now
-          </Button>
-        </CardContent>
-      </Card>
+    <div className="relative">
+      <div className="absolute -inset-4 bg-gradient-to-r from-primary/30 to-primary/10 rounded-2xl blur-2xl" />
+      <div className="relative bg-card border border-border rounded-2xl p-8 shadow-xl max-w-md mx-auto">
+        <header className="text-center mb-8">
+          <h2 className="text-2xl font-bold text-primary">Plans</h2>
+          <p className="text-gray-600">
+            Unlock exclusive features and benefits.
+          </p>
+        </header>
+
+        <div className="text-center mb-8">
+          <p className="text-5xl font-bold text-primary">₹{paymentAmount}</p>
+          <p className="text-gray-600">per month</p>
+        </div>
+
+        <ul className="space-y-4 mb-8">
+          {[
+            "Access to all premium content",
+            "24/7 customer support",
+            "Ad-free experience",
+            "Exclusive features",
+          ].map((feature, index) => (
+            <li key={index} className="flex items-center gap-3 text-gray-600">
+              <svg
+                className="w-5 h-5 text-primary flex-shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
+              {feature}
+            </li>
+          ))}
+        </ul>
+
+        <Button
+          className="w-full bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-4 rounded-lg font-semibold shadow-lg shadow-primary/20 transition-all"
+          onClick={handlePayment}
+          disabled={isPending}
+        >
+          Get Started
+        </Button>
+
+        <p className="text-center text-sm text-muted-foreground mt-6">
+          No credit card required • Cancel anytime
+        </p>
+      </div>
+      <Script src="https://checkout.razorpay.com/v1/checkout.js" />
     </div>
   );
 };

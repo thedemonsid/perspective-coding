@@ -12,29 +12,50 @@ export function SignOut() {
     >
       <Button
         type="submit"
-        className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+        variant="destructive"
+        size="lg"
+        className="relative group overflow-hidden"
       >
-        Yes, Log me out
+        <span className="relative z-10">Yes, Log me out</span>
+        <div className="absolute inset-0 bg-destructive-foreground/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
       </Button>
     </form>
   );
 }
-export default async function LogOut() {
 
+export default async function LogOut() {
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
-      <h1 className="text-4xl font-bold text-gray-800">
-        Are you sure you want to leave?
-      </h1>
-      <p className="text-gray-600 mt-2">
-        Your progress will be saved and you can continue where you left off next
-        time.
-      </p>
-      <div className="mt-6 flex space-x-4">
-        <SignOut></SignOut>
-        <Button className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
-          <Link href={"/courses"}> No, Take me back</Link>
-        </Button>
+    <div className="min-h-screen bg-background relative flex items-center justify-center p-4 w-full max-w-3xl mx-auto">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 bg-grid-white/10 [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]" />
+
+      <div className="relative z-10 max-w-md w-full">
+        <div className="bg-card/50 backdrop-blur-xl rounded-xl border border-border/50 p-8 shadow-lg">
+          <div className="text-center space-y-4">
+            <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-br from-foreground to-foreground/70 bg-clip-text text-transparent">
+              Are you sure you want to leave?
+            </h1>
+            <p className="text-muted-foreground">
+              Your progress will be saved and you can continue where you left
+              off next time.
+            </p>
+          </div>
+
+          <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+            <Button
+              asChild
+              variant="outline"
+              size="lg"
+              className="relative group overflow-hidden"
+            >
+              <Link href="/courses">
+                <span className="relative z-10">No, Take me back</span>
+                <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              </Link>
+            </Button>
+            <SignOut />
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -2,6 +2,11 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import ProgressBar from "./progress-bar";
+import PaymentCard from "./payment/payment-card";
+import PaymentComponent from "./payment/big-card";
+import { useRouter } from "next/navigation";
+import { Button } from "./ui/button";
 
 export default function Market() {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -57,6 +62,13 @@ export default function Market() {
         "Yes, you can cancel your subscription at any time. There are no long-term commitments, and we provide a hassle-free cancellation process.",
     },
   ];
+  const router = useRouter();
+  const handleStartLearning = () => {
+    router.push("/courses");
+  };
+  const handleFreeTrial = () => {
+    router.push("/signup"); // Assuming you have a signup page for free trial
+  };
 
   return (
     <main
@@ -64,6 +76,8 @@ export default function Market() {
         isLoaded ? "animate-fadeIn" : "opacity-0"
       }`}
     >
+      <ProgressBar></ProgressBar>
+
       {/* Hero Section - Improved spacing and alignment */}
       <section className="min-h-[90vh] bg-background relative">
         <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-background/5" />
@@ -89,20 +103,21 @@ export default function Market() {
                 tutorials designed specifically for students aged 14-16.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <motion.button
+                <Button
+                  onClick={handleStartLearning}
                   className="inline-flex items-center justify-center bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-4 rounded-lg font-semibold text-base shadow-lg shadow-primary/20 transition-all"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
+                  size="lg"
                 >
                   Start Learning Now
-                </motion.button>
-                <motion.button
+                </Button>
+                <Button
+                  onClick={handleFreeTrial}
+                  variant="outline"
                   className="inline-flex items-center justify-center border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground px-8 py-4 rounded-lg font-semibold text-base transition-all"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
+                  size="lg"
                 >
-                  View Subjects
-                </motion.button>
+                  Try Free Trial
+                </Button>
               </div>
               <div className="mt-8 flex items-center gap-6">
                 <div className="flex -space-x-2">
@@ -119,7 +134,6 @@ export default function Market() {
                 </p>
               </div>
             </motion.div>
-
             <motion.div
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
@@ -380,73 +394,15 @@ export default function Market() {
 
           <div className="flex justify-center">
             <motion.div
-              className="w-full max-w-lg"
+              className="w-full max-w-full grid gap-8 md:grid-cols-3"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
               viewport={{ once: true }}
             >
-              <div className="relative">
-                <div className="absolute -inset-4 bg-gradient-to-r from-primary/30 to-primary/10 rounded-2xl blur-2xl" />
-                <div className="relative bg-card border border-border rounded-2xl p-8 shadow-xl">
-                  <div className="inline-flex items-center px-4 py-2 rounded-full bg-primary text-primary-foreground text-sm font-semibold mb-6">
-                    MOST POPULAR
-                  </div>
-
-                  <div className="flex items-baseline mb-8">
-                    <span className="text-muted-foreground text-2xl">₹</span>
-                    <span className="text-5xl font-bold text-foreground">
-                      199
-                    </span>
-                    <span className="text-muted-foreground ml-2">/month</span>
-                  </div>
-
-                  <ul className="space-y-4 mb-8">
-                    {[
-                      "Access to all subjects",
-                      "Interactive tutorials",
-                      "Progress tracking",
-                      "Practice exercises",
-                      "24/7 access",
-                    ].map((feature, index) => (
-                      <motion.li
-                        key={index}
-                        className="flex items-center gap-3 text-muted-foreground"
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.3, delay: index * 0.1 }}
-                      >
-                        <svg
-                          className="w-5 h-5 text-primary flex-shrink-0"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M5 13l4 4L19 7"
-                          />
-                        </svg>
-                        {feature}
-                      </motion.li>
-                    ))}
-                  </ul>
-
-                  <motion.button
-                    className="w-full bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-4 rounded-lg font-semibold shadow-lg shadow-primary/20 transition-all"
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    Start Learning Now
-                  </motion.button>
-
-                  <p className="text-center text-sm text-muted-foreground mt-6">
-                    No credit card required • Cancel anytime
-                  </p>
-                </div>
-              </div>
+              <PaymentCard paymentAmount={149} />
+              <PaymentCard paymentAmount={249} />
+              <PaymentCard paymentAmount={599} />
             </motion.div>
           </div>
 
@@ -562,97 +518,19 @@ export default function Market() {
             <div className="relative bg-card border border-border rounded-2xl p-8 md:p-16 overflow-hidden">
               <div className="absolute top-0 left-0 w-32 h-32 bg-primary/10 rounded-full -translate-x-16 -translate-y-16" />
               <div className="absolute bottom-0 right-0 w-32 h-32 bg-primary/10 rounded-full translate-x-16 translate-y-16" />
-
-              <div className="relative z-10">
-                <div className="grid lg:grid-cols-2 gap-12 items-center">
-                  <motion.div
-                    initial={{ opacity: 0, x: -50 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.5 }}
-                    viewport={{ once: true }}
-                  >
-                    <div className="inline-flex items-center px-4 py-2 rounded-full bg-primary/10 text-primary mb-8">
-                      <span className="text-sm font-semibold">
-                        Get Started Today
-                      </span>
-                    </div>
-                    <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-                      Start Your Learning Journey Today
-                    </h2>
-                    <p className="text-xl text-muted-foreground mb-8">
-                      Join thousands of students discovering a better way to
-                      learn. Get started with our interactive tutorials for just
-                      ₹199/month.
-                    </p>
-                    <div className="space-y-4 md:space-y-0 md:space-x-4 flex flex-col md:flex-row">
-                      <motion.button
-                        className="bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-4 rounded-xl font-semibold shadow-lg shadow-primary/20 transition-all"
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                      >
-                        Start Free Trial
-                      </motion.button>
-                      <motion.button
-                        className="border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground px-8 py-4 rounded-xl font-semibold transition-all"
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                      >
-                        Watch Demo
-                      </motion.button>
-                    </div>
-                    <p className="text-muted-foreground mt-6 text-sm">
-                      ✨ No credit card required • Cancel anytime
-                    </p>
-                  </motion.div>
-
-                  <motion.div
-                    initial={{ opacity: 0, x: 50 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.5, delay: 0.2 }}
-                    viewport={{ once: true }}
-                    className="relative"
-                  >
-                    <div className="bg-muted/50 backdrop-blur-sm rounded-xl p-8 border border-border/50">
-                      <div className="space-y-6">
-                        {[
-                          "Access all subjects",
-                          "Interactive tutorials",
-                          "Progress tracking",
-                          "24/7 access",
-                        ].map((feature, index) => (
-                          <motion.div
-                            key={index}
-                            className="flex items-center gap-3"
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.3, delay: index * 0.1 }}
-                          >
-                            <svg
-                              className="w-6 h-6 text-primary flex-shrink-0"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M5 13l4 4L19 7"
-                              />
-                            </svg>
-                            <span className="text-foreground">{feature}</span>
-                          </motion.div>
-                        ))}
-                      </div>
-                      <div className="mt-8 text-center pt-8 border-t border-border">
-                        <div className="text-4xl font-bold text-foreground">
-                          ₹199
-                        </div>
-                        <div className="text-muted-foreground">per month</div>
-                      </div>
-                    </div>
-                  </motion.div>
-                </div>
+              <PaymentComponent />
+              {/* 199 plan benefits card */}
+              <div className="text-center mt-8">
+                <p className="text-muted-foreground">
+                  No credit card required • Cancel anytime
+                </p>
+                <p className="text-muted-foreground">
+                  Secure payment with Razorpay
+                </p>
+                <p className="text-muted-foreground">
+                  <span className="font-semibold text-foreground">SSL</span>{" "}
+                  secured transaction
+                </p>
               </div>
             </div>
           </div>

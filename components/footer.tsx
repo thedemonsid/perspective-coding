@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { motion } from "framer-motion";
-import { Github } from "lucide-react";
+
 const footerData = {
   copyright: {
     year: 2024,
@@ -27,59 +27,58 @@ const footerData = {
 
 const Footer = () => {
   return (
-    <footer className="relative font-bold bg-background text-xl font-wotfard">
-      {/* Subtle top border */}
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
+    <>
+      {/* This div ensures minimum page height and proper footer positioning */}
+      <div className="flex min-h-screen flex-col">
+        {/* Main content wrapper - will flex-grow to push footer down */}
+        <div className="flex-grow" />
 
-      <div className="max-w-4xl mx-auto px-6 py-8 flex flex-col justify-start items-start space-y-6">
-        <div className="grid gap-6 md:grid-cols-2">
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="space-y-2"
-          >
-            <p className="text-muted-foreground text-sm">
-              © {footerData.copyright.year}{" "}
-              {footerData.copyright.authors.join(" & ")}
-            </p>
-            <p className="text-muted-foreground/60 text-xs">
-              {footerData.copyright.text}
-            </p>
-          </motion.div>
+        {/* Footer itself */}
+        <footer className="font-bold bg-background text-xl font-wotfard w-full">
+          {/* Subtle top border */}
+          <div className="absolute inset-x-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
 
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="space-y-4 md:text-right"
-          >
-            <div className="flex flex-wrap gap-4 md:justify-end">
-              {footerData.social.map((social) => (
-                <a
-                  key={social.username}
-                  href={social.url}
-                  className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-3 text-lg"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <span>{social.username}</span>
-                </a>
-              ))}
+          <div className="max-w-4xl mx-auto px-6 py-8 flex flex-col justify-start items-start space-y-6">
+            <div className="grid gap-6 md:grid-cols-2 w-full">
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="space-y-2"
+              >
+                <p className="text-muted-foreground text-sm">
+                  © {footerData.copyright.year}{" "}
+                  {footerData.copyright.authors.join(" & ")}
+                </p>
+                <p className="text-muted-foreground/60 text-xs">
+                  {footerData.copyright.text}
+                </p>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+                className="space-y-4 md:text-right"
+              >
+                <div className="flex flex-wrap gap-4 md:justify-end">
+                  {footerData.social.map((social) => (
+                    <a
+                      key={social.username}
+                      href={social.url}
+                      className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-3 text-lg"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <span>{social.username}</span>
+                    </a>
+                  ))}
+                </div>
+              </motion.div>
             </div>
-
-            <a
-              href={footerData.sourceCode.url}
-              className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1.5 text-sm md:justify-end"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Github className="w-3.5 h-3.5" />
-              <span>Source Code</span>
-            </a>
-          </motion.div>
-        </div>
+          </div>
+        </footer>
       </div>
-    </footer>
+    </>
   );
 };
 
