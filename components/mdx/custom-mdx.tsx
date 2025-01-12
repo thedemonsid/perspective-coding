@@ -8,6 +8,9 @@ import { highlight } from "sugar-high";
 import { CodeBlock } from "./code-block";
 import MyComponent from "./my-component";
 import { cn } from "@/lib/utils";
+import ServiceMatchGame from "@/components/mdx/match-the-pairs";
+import Quizcomponent from "./quizcomponent";
+import InfoCard from "./doyouknowcard";
 
 function slugify(text: string) {
   return text
@@ -238,6 +241,9 @@ const components = {
   blockquote: BlockQuote,
   table: Table,
   MyComponent,
+  ServiceMatchGame,
+  Quizcomponent,
+  InfoCard,
 };
 
 export function CustomMDX(props: any) {
