@@ -1,5 +1,5 @@
 import HomePage from "@/components/home-page";
-
+import Market from "@/components/market-page";
 
 export default async function Page() {
   const featuredCourses = [
@@ -116,5 +116,5 @@ export default async function Page() {
     },
   ];
 
-  return <HomePage featuredCourses={featuredCourses} upcomingCourses={upcomingCourses} />;
+  return <Market />;
 }
