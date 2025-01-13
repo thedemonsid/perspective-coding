@@ -2,7 +2,13 @@ import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Sparkles, Book } from "lucide-react";
 
-const InfoCard = ({ title, description, category }) => {
+interface InfoCardProps {
+  title?: string;
+  description?: string;
+  category?: string;
+}
+
+const InfoCard = ({ title, description, category }: InfoCardProps) => {
   return (
     <Card
       className="group relative overflow-hidden hover:shadow-md

@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 import NavBar from "@/components/navbar";
-import Footer from "@/components/footer";
 import { Toaster } from "@/components/ui/toaster";
 
 import { SessionProvider } from "next-auth/react";
@@ -22,14 +21,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning className="scroll-smooth">
-      <body className={`antialiased`}>
+      <body className={`antialiased flex flex-col`}>
         <ThemeProvider attribute="class" defaultTheme="system">
           <SessionProvider>
             {" "}
             <NavBar></NavBar>
           </SessionProvider>
           {children}
-          <Footer></Footer>
           <Toaster></Toaster>
         </ThemeProvider>
       </body>

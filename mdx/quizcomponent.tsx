@@ -38,10 +38,10 @@ export default function QuizComponent({
   }
 
   return (
-    <Card className="w-full max-w-2xl mx-auto border bg-card">
-      <CardContent className="p-3 sm:p-6 space-y-4 sm:space-y-6">
+    <Card className="w-full max-w-2xl mx-auto border bg-card shadow-lg">
+      <CardContent className="p-4 sm:p-6 md:p-8 space-y-6 sm:space-y-8">
         <motion.h3
-          className="text-lg sm:text-xl font-semibold text-foreground leading-tight"
+          className="text-lg sm:text-xl md:text-2xl font-semibold text-foreground leading-relaxed"
           initial={{ y: -20 }}
           animate={{ y: 0 }}
           transition={{ type: "spring", stiffness: 300, damping: 20 }}
@@ -49,30 +49,36 @@ export default function QuizComponent({
           {question}
         </motion.h3>
 
-        <div className="space-y-2 sm:space-y-3">
+        <div className="grid gap-3 sm:gap-4">
           {options.map((option, index) => (
             <motion.div
               key={index}
               initial={{ x: -20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
-              transition={{ delay: index * 0.1 }}
+              transition={{
+                delay: index * 0.1,
+                duration: 0.3,
+                ease: "easeOut",
+              }}
               onHoverStart={() => setIsHovering(index)}
               onHoverEnd={() => setIsHovering(null)}
             >
               <Button
                 variant={selected === option ? "secondary" : "outline"}
-                className={`w-full min-h-[3rem] p-2 sm:p-4 text-left justify-start relative text-sm sm:text-base
+                className={`w-full min-h-[3.5rem] sm:min-h-[4rem] p-4 sm:p-5 text-left justify-start relative
+                  text-sm sm:text-base md:text-lg font-medium
                   ${
                     selected === option && isCorrect
-                      ? "bg-green-100 dark:bg-green-900/20 border-green-200 dark:border-green-800"
+                      ? "bg-green-100 dark:bg-green-900/20 border-green-200 dark:border-green-800 shadow-green-100/50 dark:shadow-green-900/20"
                       : ""
                   }
                   ${
                     selected === option && !isCorrect
-                      ? "bg-destructive/10 border-destructive/50"
+                      ? "bg-destructive/10 border-destructive/50 shadow-destructive/20"
                       : ""
                   }
-                  transition-all duration-300`}
+                  hover:scale-[1.01] active:scale-[0.99]
+                  transition-all duration-300 ease-in-out shadow-sm hover:shadow-md`}
                 onClick={() => handleOptionSelect(option)}
                 disabled={selected !== null}
               >
@@ -81,7 +87,7 @@ export default function QuizComponent({
                     scale: isHovering === index ? 1.02 : 1,
                     x: isHovering === index ? 10 : 0,
                   }}
-                  className="relative z-10 line-clamp-2 sm:line-clamp-1"
+                  className="relative z-10 line-clamp-2 sm:line-clamp-1 px-2"
                 >
                   {option}
                 </motion.span>
@@ -93,24 +99,25 @@ export default function QuizComponent({
         <AnimatePresence>
           {selected && (
             <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              className={`flex items-center gap-2 p-3 sm:p-4 rounded-lg ${
-                isCorrect
-                  ? "bg-green-100 dark:bg-green-900/20"
-                  : "bg-destructive/10"
-              }`}
+              initial={{ opacity: 0, height: 0, y: 20 }}
+              animate={{ opacity: 1, height: "auto", y: 0 }}
+              exit={{ opacity: 0, height: 0, y: 20 }}
+              className={`flex items-center gap-3 p-4 sm:p-6 rounded-xl shadow-lg
+                ${
+                  isCorrect
+                    ? "bg-green-100 dark:bg-green-900/20 border border-green-200 dark:border-green-800"
+                    : "bg-destructive/10 border border-destructive/50"
+                }`}
             >
               {isCorrect ? (
                 <motion.div
                   initial={{ scale: 0.8 }}
                   animate={{ scale: 1 }}
                   transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                  className="flex items-center gap-2 text-green-700 dark:text-green-300"
+                  className="flex items-center gap-3 text-green-700 dark:text-green-300"
                 >
-                  <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
-                  <span className="text-sm sm:text-base font-medium">
+                  <CheckCircle className="w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0" />
+                  <span className="text-sm sm:text-base md:text-lg font-medium leading-relaxed">
                     Excellent choice! That&apos;s correct!
                   </span>
                 </motion.div>
@@ -119,10 +126,10 @@ export default function QuizComponent({
                   initial={{ scale: 0.8 }}
                   animate={{ scale: 1 }}
                   transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                  className="flex items-center gap-2 text-destructive"
+                  className="flex items-center gap-3 text-destructive"
                 >
-                  <XCircle className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
-                  <span className="text-sm sm:text-base font-medium">
+                  <XCircle className="w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0" />
+                  <span className="text-sm sm:text-base md:text-lg font-medium leading-relaxed">
                     Not quite there. Want to try again?
                   </span>
                 </motion.div>

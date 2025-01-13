@@ -1,106 +1,163 @@
-"use client";
-
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { Button } from "./ui/button";
 import ProgressBar from "./progress-bar";
 import PaymentCard from "./payment/payment-card";
 import PaymentComponent from "./payment/big-card";
-import { useRouter } from "next/navigation";
-import { Button } from "./ui/button";
 import { numberOfUsers } from "@/lib/db/user";
+import { Mail, Github, Twitter, MessageSquare } from "lucide-react";
+import {
+  Accordion,
+  AccordionTrigger,
+  AccordionContent,
+  AccordionItem,
+} from "./ui/accordion";
 
-export default function Market() {
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [activeTab, setActiveTab] = useState("mathematics");
-  const [activeFaq, setActiveFaq] = useState<number | null>(null);
-  const [numOfUsers, setNumOfUsers] = useState(0);
-  useEffect(() => {
-    async function fetchNumOfUsers() {
-      const res = await numberOfUsers();
-      if (res < 297) {
-        setNumOfUsers(297);
-        return;
-      }
-      setNumOfUsers(res);
-    }
-    fetchNumOfUsers();
-  }, [isLoaded]);
-  useEffect(() => {
-    setIsLoaded(true);
-  }, []);
+type Subject = {
+  id: string;
+  title: string;
+  icon: string;
+  description: string;
+};
 
-  const subjects = [
-    {
-      id: "mathematics",
-      title: "Mathematics",
-      icon: "➗",
-      description:
-        "Master algebra, geometry, and calculus through interactive problem-solving",
-    },
-    {
-      id: "computerScience",
-      title: "Computer Science",
-      icon: "💻",
-      description:
-        "Learn programming and computational thinking with hands-on coding",
-    },
-    {
-      id: "artificialIntelligence",
-      title: "Artificial Intelligence",
-      icon: "🤖",
-      description: "Explore the fundamentals of AI and machine learning",
-    },
-  ];
+type Feature = {
+  title: string;
+  description: string;
+  icon: string;
+};
 
-  const faqItems = [
+const subjects: Subject[] = [
+  {
+    id: "mathematics",
+    title: "Mathematics",
+    icon: "➗",
+    description:
+      "Master algebra, geometry, and calculus through interactive problem-solving",
+  },
+  {
+    id: "computerScience",
+    title: "Computer Science",
+    icon: "💻",
+    description:
+      "Learn programming and computational thinking with hands-on coding",
+  },
+  {
+    id: "artificialIntelligence",
+    title: "Artificial Intelligence",
+    icon: "🤖",
+    description: "Explore the fundamentals of AI and machine learning",
+  },
+];
+
+const features: Feature[] = [
+  {
+    title: "Interactive Learning",
+    description:
+      "Engage with dynamic content that makes complex concepts simple and fun to understand",
+    icon: "🔍",
+  },
+  {
+    title: "Comprehensive Curriculum",
+    description:
+      "Cover all major subjects including Mathematics, CS, and AI with structured learning paths",
+    icon: "📚",
+  },
+  {
+    title: "Quick Progress",
+    description:
+      "Learn at your own pace with bite-sized lessons and instant feedback",
+    icon: "🚀",
+  },
+  {
+    title: "Self-Paced Learning",
+    description:
+      "Study whenever you want with 24/7 access to all learning materials",
+    icon: "⏱️",
+  },
+  {
+    title: "Safe Learning Environment",
+    description: "Age-appropriate content in a secure digital learning space",
+    icon: "🛡️",
+  },
+  {
+    title: "Peer Learning",
+    description: "Connect with other learners and share your learning journey",
+    icon: "👥",
+  },
+];
+const faqItems = [
+  {
+    value: "item-1",
+    question: "What age group is this platform suitable for?",
+    answer:
+      "Perspective Learning is specifically designed for students aged 14-16 years (Classes 8-10). The content and teaching methodology are tailored to match their learning needs and curriculum requirements.",
+  },
+  {
+    value: "item-2",
+    question: "What subjects are covered?",
+    answer:
+      "We cover core subjects including Mathematics, Computer Science, Artificial Intelligence, and more. Each subject features interactive tutorials, practice exercises, and real-world applications.",
+  },
+  {
+    value: "item-3",
+    question: "How much does it cost?",
+    answer:
+      "The subscription starts at ₹199 per month for our first 100 users, giving you full access to all subjects and features. We also offer a 7-day money-back guarantee if you're not satisfied.",
+  },
+  {
+    value: "item-4",
+    question: "Can I cancel my subscription anytime?",
+    answer:
+      "Yes, you can cancel your subscription at any time. There are no long-term commitments, and we provide a hassle-free cancellation process.",
+  },
+];
+const footerData = {
+  copyright: {
+    year: new Date().getFullYear(),
+    authors: ["CodeToTech"],
+    text: "Building the future of education with Next.js and AI",
+  },
+  social: [
     {
-      question: "What age group is this platform suitable for?",
-      answer:
-        "Perspective Learning is specifically designed for students aged 14-16 years (Classes 8-10). The content and teaching methodology are tailored to match their learning needs and curriculum requirements.",
+      username: "Email",
+      url: "mailto:siddheshshrirame@gmail.com",
+      icon: Mail,
     },
     {
-      question: "What subjects are covered?",
-      answer:
-        "We cover core subjects including Mathematics, Computer Science, Artificial Intelligence, and more. Each subject features interactive tutorials, practice exercises, and real-world applications.",
+      username: "GitHub",
+      url: "https://github.com/thedemonsid/perspective-coding",
+      icon: Github,
     },
     {
-      question: "How much does it cost?",
-      answer:
-        "The subscription is priced at ₹199 per month, giving you full access to all subjects and features. We also offer a 7-day money-back guarantee if you're not satisfied.",
+      username: "Twitter",
+      url: "https://x.com/the_demon_sid",
+      icon: Twitter,
     },
     {
-      question: "Can I cancel my subscription anytime?",
-      answer:
-        "Yes, you can cancel your subscription at any time. There are no long-term commitments, and we provide a hassle-free cancellation process.",
+      username: "WhatsApp",
+      url: "https://wa.me/+919834533147",
+      icon: MessageSquare, // Import MessageSquare from lucide-react
     },
-  ];
-  const router = useRouter();
-  const handleStartLearning = () => {
-    router.push("/courses");
-  };
-  const handleFreeTrial = () => {
-    router.push("/signup"); // Assuming you have a signup page for free trial
-  };
+  ],
+  contact: {
+    title: "Let's Connect",
+    email: "siddheshshrirame@gmail.com",
+    description: "Have questions about our courses? Reach out to us directly!",
+    whatsapp: "+91 98345 33147",
+  },
+};
+
+export default async function Market() {
+  const numOfUsers = await numberOfUsers();
+  const displayUsers = numOfUsers < 297 ? 297 : numOfUsers;
 
   return (
-    <main
-      className={`min-h-screen bg-background text-foreground ${
-        isLoaded ? "animate-fadeIn" : "opacity-0"
-      }`}
-    >
-      <ProgressBar></ProgressBar>
+    <main className="min-h-screen bg-background text-foreground">
+      <ProgressBar />
 
-      {/* Hero Section - Improved spacing and alignment */}
       <section className="min-h-[90vh] bg-background relative">
         <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-background/5 -z-10" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
           <div className="grid lg:grid-cols-2 gap-16 items-center pt-32 lg:pt-20 h-full pb-16">
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5 }}
-              className="max-w-2xl"
-            >
+            <div className="max-w-2xl">
               <div className="inline-flex items-center px-4 py-2 rounded-full bg-primary/10 text-primary mb-8">
                 <span className="text-sm font-semibold">
                   New: AI-Powered Learning Path
@@ -116,14 +173,12 @@ export default function Market() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button
-                  onClick={handleStartLearning}
                   className="inline-flex items-center justify-center bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-4 rounded-lg font-semibold text-base shadow-lg shadow-primary/20 transition-all"
                   size="lg"
                 >
                   Start Learning Now
                 </Button>
                 <Button
-                  onClick={handleFreeTrial}
                   variant="outline"
                   className="inline-flex items-center justify-center border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground px-8 py-4 rounded-lg font-semibold text-base transition-all"
                   size="lg"
@@ -142,28 +197,20 @@ export default function Market() {
                 </div>
                 <p className="text-sm text-muted-foreground">
                   <span className="font-semibold text-foreground">
-                    {numOfUsers}+
+                    {displayUsers}+
                   </span>{" "}
                   students already learning
                 </p>
               </div>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="relative"
-            >
+            </div>
+            <div className="relative">
               <div className="absolute -inset-4 bg-primary/20 rounded-2xl blur-2xl" />
               <div className="relative bg-card border border-border shadow-2xl rounded-2xl p-8">
                 <div className="grid gap-6">
-                  {subjects.map((subject, index) => (
-                    <motion.div
+                  {subjects.map((subject) => (
+                    <div
                       key={subject.id}
                       className="bg-muted/50 backdrop-blur-sm p-6 rounded-xl border border-border/50"
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.3, delay: 0.1 * (index + 1) }}
                     >
                       <div className="flex items-start gap-4">
                         <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-2xl">
@@ -178,11 +225,11 @@ export default function Market() {
                           </p>
                         </div>
                       </div>
-                    </motion.div>
+                    </div>
                   ))}
                 </div>
               </div>
-            </motion.div>
+            </div>
           </div>
         </div>
       </section>
@@ -190,13 +237,7 @@ export default function Market() {
       {/* Features Section */}
       <section className="py-24 bg-muted/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            className="text-center mb-16"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true }}
-          >
+          <div className="text-center mb-16">
             <div className="inline-flex items-center px-4 py-2 rounded-full bg-primary/10 text-primary mb-8">
               <span className="text-sm font-semibold">Why Choose Us</span>
             </div>
@@ -206,54 +247,13 @@ export default function Market() {
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Discover the features that make learning engaging and effective
             </p>
-          </motion.div>
+          </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                title: "Interactive Learning",
-                description:
-                  "Engage with dynamic content that makes complex concepts simple and fun to understand",
-                icon: "🔍",
-              },
-              {
-                title: "Comprehensive Curriculum",
-                description:
-                  "Cover all major subjects including Mathematics, CS, and AI with structured learning paths",
-                icon: "📚",
-              },
-              {
-                title: "Quick Progress",
-                description:
-                  "Learn at your own pace with bite-sized lessons and instant feedback",
-                icon: "🚀",
-              },
-              {
-                title: "Self-Paced Learning",
-                description:
-                  "Study whenever you want with 24/7 access to all learning materials",
-                icon: "⏱️",
-              },
-              {
-                title: "Safe Learning Environment",
-                description:
-                  "Age-appropriate content in a secure digital learning space",
-                icon: "🛡️",
-              },
-              {
-                title: "Peer Learning",
-                description:
-                  "Connect with other learners and share your learning journey",
-                icon: "👥",
-              },
-            ].map((feature, index) => (
-              <motion.div
+            {features.map((feature) => (
+              <div
                 key={feature.title}
                 className="bg-card border border-border p-8 rounded-xl hover:shadow-lg transition-all duration-300"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
               >
                 <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-2xl mb-6">
                   {feature.icon}
@@ -264,137 +264,16 @@ export default function Market() {
                 <p className="text-muted-foreground leading-relaxed">
                   {feature.description}
                 </p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Subjects Section */}
-      <section className="py-24 bg-background">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            className="text-center mb-16"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true }}
-          >
-            <div className="inline-flex items-center px-4 py-2 rounded-full bg-primary/10 text-primary mb-8">
-              <span className="text-sm font-semibold">Our Subjects</span>
-            </div>
-            <h2 className="text-4xl font-bold text-foreground mb-4">
-              Explore Our Subjects
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Dive into a world of interactive learning across various
-              disciplines
-            </p>
-          </motion.div>
-
-          <div className="flex flex-wrap justify-center gap-4 mb-8">
-            {subjects.map((subject) => (
-              <motion.button
-                key={subject.id}
-                className={`px-6 py-3 rounded-full font-medium transition-all ${
-                  activeTab === subject.id
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-muted text-muted-foreground hover:text-foreground"
-                }`}
-                onClick={() => setActiveTab(subject.id)}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                {subject.title}
-              </motion.button>
-            ))}
-          </div>
-
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeTab}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.5 }}
-              className="bg-card border border-border rounded-2xl p-8"
-            >
-              <div className="max-w-3xl mx-auto">
-                <h3 className="text-2xl font-bold text-foreground mb-4 flex items-center gap-3">
-                  <span className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-xl">
-                    {subjects.find((s) => s.id === activeTab)?.icon}
-                  </span>
-                  {subjects.find((s) => s.id === activeTab)?.title}
-                </h3>
-                <p className="text-muted-foreground mb-6 leading-relaxed">
-                  {subjects.find((s) => s.id === activeTab)?.description}
-                </p>
-                <ul className="space-y-4">
-                  <li className="flex items-center gap-3 text-muted-foreground">
-                    <svg
-                      className="w-5 h-5 text-primary"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
-                    Interactive Lessons
-                  </li>
-                  <li className="flex items-center gap-3 text-muted-foreground">
-                    <svg
-                      className="w-5 h-5 text-primary"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
-                    Practice Exercises
-                  </li>
-                  <li className="flex items-center gap-3 text-muted-foreground">
-                    <svg
-                      className="w-5 h-5 text-primary"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
-                    Real-world Applications
-                  </li>
-                </ul>
               </div>
-            </motion.div>
-          </AnimatePresence>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* Pricing Section */}
       <section className="py-24 bg-muted/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            className="text-center mb-16"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true }}
-          >
+          <div className="text-center mb-16">
             <div className="inline-flex items-center px-4 py-2 rounded-full bg-primary/10 text-primary mb-8">
               <span className="text-sm font-semibold">Simple Pricing</span>
             </div>
@@ -404,29 +283,17 @@ export default function Market() {
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Affordable pricing with no hidden fees
             </p>
-          </motion.div>
-
-          <div className="flex justify-center">
-            <motion.div
-              className="w-full max-w-full grid gap-8 md:grid-cols-3"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              viewport={{ once: true }}
-            >
-              <PaymentCard paymentAmount={149} />
-              <PaymentCard paymentAmount={249} />
-              <PaymentCard paymentAmount={599} />
-            </motion.div>
           </div>
 
-          <motion.div
-            className="mt-12 text-center"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true }}
-          >
+          <div className="flex justify-center">
+            <div className="w-full max-w-full grid gap-8 md:grid-cols-3">
+              <PaymentCard paymentAmount={199} />
+              <PaymentCard paymentAmount={499} />
+              <PaymentCard paymentAmount={799} />
+            </div>
+          </div>
+
+          <div className="mt-12 text-center">
             <div className="inline-flex items-center gap-2 text-muted-foreground">
               <svg
                 className="w-5 h-5"
@@ -443,20 +310,14 @@ export default function Market() {
               </svg>
               <span>7-day money-back guarantee</span>
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
 
       {/* FAQ Section */}
       <section className="py-24 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            className="text-center mb-16"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true }}
-          >
+          <div className="text-center mb-16">
             <div className="inline-flex items-center px-4 py-2 rounded-full bg-primary/10 text-primary mb-8">
               <span className="text-sm font-semibold">FAQ</span>
             </div>
@@ -466,60 +327,21 @@ export default function Market() {
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Everything you need to know about Perspective Learning
             </p>
-          </motion.div>
+          </div>
 
-          <div className="max-w-3xl mx-auto space-y-4">
-            {faqItems.map((item, index) => (
-              <motion.div
-                key={index}
-                className="bg-card border border-border rounded-lg hover:border-primary/50 transition-colors duration-300"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <button
-                  className="w-full px-6 py-4 text-left focus:outline-none"
-                  onClick={() =>
-                    setActiveFaq(activeFaq === index ? null : index)
-                  }
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="text-lg font-semibold text-foreground">
-                      {item.question}
-                    </span>
-                    <svg
-                      className={`w-6 h-6 text-primary transform transition-transform duration-300 ${
-                        activeFaq === index ? "rotate-180" : ""
-                      }`}
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M19 9l-7 7-7-7"
-                      />
-                    </svg>
-                  </div>
-                </button>
-                <AnimatePresence>
-                  {activeFaq === index && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: "auto" }}
-                      exit={{ opacity: 0, height: 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="px-6 pb-4"
-                    >
-                      <p className="text-muted-foreground">{item.answer}</p>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </motion.div>
-            ))}
+          <div className="max-w-3xl mx-auto">
+            <Accordion type="single" collapsible className="w-full">
+              {faqItems.map((item) => (
+                <AccordionItem key={item.value} value={item.value}>
+                  <AccordionTrigger className="text-left">
+                    {item.question}
+                  </AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground">
+                    {item.answer}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
           </div>
         </div>
       </section>
@@ -533,7 +355,6 @@ export default function Market() {
               <div className="absolute top-0 left-0 w-32 h-32 bg-primary/10 rounded-full -translate-x-16 -translate-y-16" />
               <div className="absolute bottom-0 right-0 w-32 h-32 bg-primary/10 rounded-full translate-x-16 translate-y-16" />
               <PaymentComponent />
-              {/* 199 plan benefits card */}
               <div className="text-center mt-8">
                 <p className="text-muted-foreground">
                   No credit card required • Cancel anytime
@@ -550,6 +371,74 @@ export default function Market() {
           </div>
         </div>
       </section>
+
+      {/* Footer Section */}
+      <footer className="font-bold bg-background text-xl font-wotfard w-full border-t border-border/40">
+        <div className="h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
+
+        <div className="max-w-4xl mx-auto px-6 py-12">
+          <div className="mb-12">
+            <h3 className="text-xl font-semibold mb-4 text-foreground">
+              {footerData.contact.title}
+            </h3>
+            <p className="text-sm text-muted-foreground mb-6">
+              {footerData.contact.description}
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <a
+                href={`mailto:${footerData.contact.email}`}
+                className="inline-flex items-center gap-2 text-sm text-primary hover:text-primary/80 transition-colors"
+              >
+                <Mail size={16} />
+                {footerData.contact.email}
+              </a>
+              <a
+                href="https://wa.me/+919834533147"
+                className="inline-flex items-center gap-2 text-sm text-primary hover:text-primary/80 transition-colors"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <MessageSquare size={16} />
+                {footerData.contact.whatsapp}
+              </a>
+            </div>
+          </div>
+
+          <div className="grid gap-8 md:grid-cols-2 w-full">
+            <div className="space-y-2">
+              <p className="text-sm text-muted-foreground">
+                © {footerData.copyright.year}{" "}
+                {footerData.copyright.authors.join(" & ")}
+              </p>
+              <p className="text-xs text-muted-foreground/80">
+                {footerData.copyright.text}
+              </p>
+            </div>
+
+            <div className="space-y-4 md:text-right">
+              <div className="flex flex-wrap gap-6 md:justify-end">
+                {footerData.social.map((social) => {
+                  const Icon = social.icon;
+                  return (
+                    <a
+                      key={social.username}
+                      href={social.url}
+                      className="text-muted-foreground hover:text-primary transition-colors flex items-center gap-2 text-sm group"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Icon className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                      <span className="group-hover:underline">
+                        {social.username}
+                      </span>
+                    </a>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
     </main>
   );
 }

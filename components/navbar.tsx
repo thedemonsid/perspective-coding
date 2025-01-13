@@ -64,11 +64,10 @@ const Navbar = () => {
                 className="rounded-full"
               />
               <span className="text-lg font-semibold tracking-tight">
-                Perspective Coding
+                Code&lt;/&gt;Totech
               </span>
             </Link>
           </div>
-
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             {navItems.map((item) => (

@@ -13,9 +13,70 @@ declare global {
 
 interface PaymentCardProps {
   paymentAmount: number;
+  isEarlyBird?: boolean;
 }
 
-const PaymentCard: React.FC<PaymentCardProps> = ({ paymentAmount }) => {
+interface Feature {
+  name: string;
+  available: boolean;
+}
+
+interface PricingTier {
+  title: string;
+  features: Feature[];
+  tag?: string;
+}
+
+const BASE_FEATURES = [
+  "Access to all basic courses",
+  "Practice exercises and quizzes",
+  "Community forum access",
+  "Learn at your own pace",
+  "Live group classes",
+  "1-on-1 tutoring sessions",
+];
+
+const PRICING_TIERS: Record<number, PricingTier> = {
+  199: {
+    title: "Basic Plan (Early Bird)",
+    features: [
+      { name: BASE_FEATURES[0], available: true },
+      { name: BASE_FEATURES[1], available: true },
+      { name: BASE_FEATURES[2], available: true },
+      { name: BASE_FEATURES[3], available: true },
+      { name: BASE_FEATURES[4], available: false },
+      { name: BASE_FEATURES[5], available: false },
+    ],
+    tag: "First 100 users only!",
+  },
+  499: {
+    title: "Standard Plan",
+    features: [
+      { name: BASE_FEATURES[0], available: true },
+      { name: BASE_FEATURES[1], available: true },
+      { name: BASE_FEATURES[2], available: true },
+      { name: BASE_FEATURES[3], available: true },
+      { name: BASE_FEATURES[4], available: true },
+      { name: BASE_FEATURES[5], available: false },
+    ],
+  },
+  799: {
+    title: "Premium Plan",
+    features: [
+      { name: BASE_FEATURES[0], available: true },
+      { name: BASE_FEATURES[1], available: true },
+      { name: BASE_FEATURES[2], available: true },
+      { name: BASE_FEATURES[3], available: true },
+      { name: BASE_FEATURES[4], available: true },
+      { name: BASE_FEATURES[5], available: true },
+    ],
+  },
+};
+
+const PaymentCard: React.FC<PaymentCardProps> = ({
+  paymentAmount,
+  isEarlyBird,
+}) => {
   const toast = useToast();
   const [isPending, startTransition] = useTransition();
 
@@ -70,44 +131,74 @@ const PaymentCard: React.FC<PaymentCardProps> = ({ paymentAmount }) => {
     });
   };
 
+  const tierDetails = isEarlyBird
+    ? PRICING_TIERS[199]
+    : PRICING_TIERS[paymentAmount as keyof typeof PRICING_TIERS];
+
   return (
     <div className="relative">
       <div className="absolute -inset-4 bg-gradient-to-r from-primary/30 to-primary/10 rounded-2xl blur-2xl" />
       <div className="relative bg-card border border-border rounded-2xl p-8 shadow-xl max-w-md mx-auto">
+        {tierDetails.tag && (
+          <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-4 py-1 rounded-full text-sm font-semibold">
+            {tierDetails.tag}
+          </div>
+        )}
+
         <header className="text-center mb-8">
-          <h2 className="text-2xl font-bold text-primary">Plans</h2>
-          <p className="text-gray-600">
-            Unlock exclusive features and benefits.
+          <h2 className="text-2xl font-bold text-primary">
+            {tierDetails.title}
+          </h2>
+          <p className="text-muted-foreground">
+            Unlock exclusive features and benefits
           </p>
         </header>
 
         <div className="text-center mb-8">
           <p className="text-5xl font-bold text-primary">₹{paymentAmount}</p>
-          <p className="text-gray-600">per month</p>
+          <p className="text-muted-foreground">per month</p>
         </div>
 
         <ul className="space-y-4 mb-8">
-          {[
-            "Access to all premium content",
-            "24/7 customer support",
-            "Ad-free experience",
-            "Exclusive features",
-          ].map((feature, index) => (
-            <li key={index} className="flex items-center gap-3 text-gray-600">
-              <svg
-                className="w-5 h-5 text-primary flex-shrink-0"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+          {tierDetails.features.map((feature, index) => (
+            <li
+              key={index}
+              className="flex items-center gap-3 text-muted-foreground"
+            >
+              {feature.available ? (
+                <svg
+                  className="w-5 h-5 text-primary flex-shrink-0"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M5 13l4 4L19 7"
+                  />
+                </svg>
+              ) : (
+                <svg
+                  className="w-5 h-5 text-destructive flex-shrink-0"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              )}
+              <span
+                className={!feature.available ? "text-muted-foreground/50" : ""}
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M5 13l4 4L19 7"
-                />
-              </svg>
-              {feature}
+                {feature.name}
+              </span>
             </li>
           ))}
         </ul>
@@ -121,7 +212,7 @@ const PaymentCard: React.FC<PaymentCardProps> = ({ paymentAmount }) => {
         </Button>
 
         <p className="text-center text-sm text-muted-foreground mt-6">
-          No credit card required • Cancel anytime
+          No credit card required
         </p>
       </div>
       <Script src="https://checkout.razorpay.com/v1/checkout.js" />

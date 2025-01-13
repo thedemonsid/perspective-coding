@@ -1,7 +1,7 @@
 import React from "react";
 import { getBlogPost } from "../utils";
 import { notFound } from "next/navigation";
-import { CustomMDX } from "@/components/mdx/custom-mdx";
+import { CustomMDX } from "@/mdx/custom-mdx";
 import { formatDate } from "@/lib/format-date";
 import ProgressBar from "@/components/progress-bar";
 import { auth } from "@/auth";

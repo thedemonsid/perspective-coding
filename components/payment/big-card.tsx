@@ -1,3 +1,4 @@
+"use client";
 import React, { useTransition } from "react";
 import { motion } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
@@ -68,10 +69,11 @@ const PaymentComponent = () => {
   };
 
   const features = [
-    "Access all subjects",
-    "Interactive tutorials",
-    "Progress tracking",
-    "24/7 access",
+    "Access to all basic courses",
+    "Practice exercises and quizzes",
+    "Community forum access",
+    "Learn at your own pace",
+    "Live group classes",
   ];
 
   return (
@@ -124,7 +126,7 @@ const PaymentComponent = () => {
               ))}
             </div>
             <div className="mt-8 text-center pt-8 border-t border-border">
-              <div className="text-5xl font-bold text-foreground">₹259</div>
+              <div className="text-5xl font-bold text-foreground">₹499</div>
               <div className="text-muted-foreground mt-2">per month</div>
             </div>
           </div>
