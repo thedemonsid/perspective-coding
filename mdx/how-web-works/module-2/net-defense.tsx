@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useCallback } from "react";
+"use client";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import {
   AlertDialog,
   AlertDialogContent,
@@ -47,6 +48,12 @@ const NetworkDefenseGame = () => {
   const [gameOver, setGameOver] = useState(false);
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
+  const healthRef = useRef(networkHealth);
+
+  // Update ref when health changes
+  useEffect(() => {
+    healthRef.current = networkHealth;
+  }, [networkHealth]);
 
   const generateThreat = useCallback(
     (): Threat => ({
@@ -61,21 +68,12 @@ const NetworkDefenseGame = () => {
     setThreats((prev) => [...prev, generateThreat()]);
   }, [generateThreat]);
 
-  const handleCollision = useCallback(() => {
-    setThreats((prevThreats) => {
-      const remainingThreats = prevThreats.filter((threat) => {
-        const isBlocked = defenses.some(
-          (defense) => defense.position === threat.position
-        );
-        if (!isBlocked) {
-          setNetworkHealth((health) => Math.max(0, health - threat.damage));
-        }
-        return isBlocked;
-      });
-      setScore((prev) => prev + (prevThreats.length - remainingThreats.length));
-      return remainingThreats;
-    });
-  }, [defenses]);
+  const handleCollision = useCallback((threatId: number, damage: number) => {
+    setThreats((prev) => prev.filter((t) => t.id !== threatId));
+    if (healthRef.current > 0) {
+      setNetworkHealth((prev) => Math.max(0, prev - damage));
+    }
+  }, []);
 
   const placeDefense = useCallback(
     (position: number) => {
@@ -106,12 +104,22 @@ const NetworkDefenseGame = () => {
   }, [paused, gameOver, spawnThreat]);
 
   useEffect(() => {
-    handleCollision();
+    threats.forEach((threat) => {
+      const isBlocked = defenses.some(
+        (defense) => defense.position === threat.position
+      );
+      if (!isBlocked) {
+        handleCollision(threat.id, threat.damage);
+      }
+    });
+  }, [threats, defenses, handleCollision]);
+
+  useEffect(() => {
     if (networkHealth <= 0) {
       setGameOver(true);
       setHighScore((prev) => Math.max(prev, score));
     }
-  }, [threats, handleCollision, networkHealth, score]);
+  }, [networkHealth, score]);
 
   return (
     <Card className="h-full w-full max-w-2xl mx-auto">

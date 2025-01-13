@@ -20,6 +20,8 @@ import {
   StoryCreatorTool,
   VariableExplorer,
 } from "./math-content";
+import NetworkDefenseGame from "./how-web-works/module-2/net-defense";
+import SecretMessageEncoder from "./how-web-works/module-2/network-encoder";
 
 function slugify(text: string) {
   return text
@@ -260,6 +262,8 @@ const components = {
   PatternRecognitionGame,
   StoryCreatorTool,
   VariableExplorer,
+  NetworkDefenseGame,
+  SecretMessageEncoder,
 };
 
 export function CustomMDX(props: any) {
