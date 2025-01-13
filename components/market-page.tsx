@@ -10,6 +10,7 @@ import {
   AccordionContent,
   AccordionItem,
 } from "./ui/accordion";
+import Link from "next/link";
 
 type Subject = {
   id: string;
@@ -183,7 +184,7 @@ export default async function Market() {
                   className="inline-flex items-center justify-center border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground px-8 py-4 rounded-lg font-semibold text-base transition-all"
                   size="lg"
                 >
-                  Try Free Trial
+                  <Link href={"/courses"}> Try Now !!</Link>
                 </Button>
               </div>
               <div className="mt-8 flex items-center gap-6">
@@ -354,7 +355,7 @@ export default async function Market() {
             <div className="relative bg-card border border-border rounded-2xl p-8 md:p-16 overflow-hidden">
               <div className="absolute top-0 left-0 w-32 h-32 bg-primary/10 rounded-full -translate-x-16 -translate-y-16" />
               <div className="absolute bottom-0 right-0 w-32 h-32 bg-primary/10 rounded-full translate-x-16 translate-y-16" />
-              <PaymentComponent />
+              <PaymentComponent paymentAmount={499} />
               <div className="text-center mt-8">
                 <p className="text-muted-foreground">
                   No credit card required • Cancel anytime

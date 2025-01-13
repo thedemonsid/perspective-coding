@@ -5,6 +5,7 @@ import { useToast } from "@/hooks/use-toast";
 import Script from "next/script";
 import { createOrder } from "@/actions/payment";
 import { CheckIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 declare global {
   interface Window {
@@ -13,14 +14,30 @@ declare global {
   }
 }
 
-const PaymentComponent = () => {
+const PaymentComponent = ({ paymentAmount }: { paymentAmount: number }) => {
   const toast = useToast();
   const [isPending, startTransition] = useTransition();
-
+  const router = useRouter();
   const handlePayment = () => {
     startTransition(async () => {
       try {
-        const order = await createOrder(199);
+        const order = await createOrder(paymentAmount);
+        if (!order.success) {
+          if (order.message === "User not Logged in") {
+            toast.toast({
+              title: "Error",
+              description: "User not Logged in.",
+              variant: "destructive",
+            });
+            return router.push("/auth/login");
+          }
+          toast.toast({
+            title: "Error",
+            description: "Invalid subscription amount.",
+            variant: "destructive",
+          });
+          return;
+        }
         toast.toast({
           title: "Order created",
           description: "Please complete the payment.",
@@ -31,7 +48,7 @@ const PaymentComponent = () => {
           amount: order.order?.amount,
           currency: order.order?.currency,
           name: "Perspective",
-          description: "Subscription fo259/month",
+          description: `Subscription for ${paymentAmount}/month`,
           order_id: order.order?.id,
           handler: function (response: {
             razorpay_payment_id: string;
@@ -45,11 +62,6 @@ const PaymentComponent = () => {
               description: "Thank you for your subscription.",
               variant: "default",
             });
-          },
-          prefill: {
-            name: "John Doe",
-            email: "Perspective@gmail.com",
-            contact: "1234567890",
           },
           theme: {
             color: "#3399cc",
@@ -88,7 +100,7 @@ const PaymentComponent = () => {
               onClick={handlePayment}
               disabled={isPending}
             >
-              {isPending ? "Processing..." : "Subscribe fo259/month"}
+              {isPending ? "Processing..." : "Subscribe"}
             </motion.button>
             <motion.button
               className="w-full border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground px-8 py-4 rounded-xl font-semibold transition-all"
@@ -126,8 +138,10 @@ const PaymentComponent = () => {
               ))}
             </div>
             <div className="mt-8 text-center pt-8 border-t border-border">
-              <div className="text-5xl font-bold text-foreground">₹499</div>
-              <div className="text-muted-foreground mt-2">per month</div>
+              <div className="text-5xl font-bold text-foreground">
+                ₹{paymentAmount}
+              </div>
+              <div className="text-muted-foreground mt-2">/ 3 month</div>
             </div>
           </div>
         </motion.div>

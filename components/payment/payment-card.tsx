@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import Script from "next/script";
 import { createOrder } from "@/actions/payment";
+import { redirect, useRouter } from "next/navigation";
 declare global {
   interface Window {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -79,11 +80,27 @@ const PaymentCard: React.FC<PaymentCardProps> = ({
 }) => {
   const toast = useToast();
   const [isPending, startTransition] = useTransition();
-
+  const router = useRouter();
   const handlePayment = () => {
     startTransition(async () => {
       try {
         const order = await createOrder(paymentAmount);
+        if (!order.success) {
+          if (order.message === "User not Logged in") {
+            toast.toast({
+              title: "Error",
+              description: "User not Logged in.",
+              variant: "destructive",
+            });
+            return router.push("/auth/login");
+          }
+          toast.toast({
+            title: "Error",
+            description: "Invalid subscription amount.",
+            variant: "destructive",
+          });
+          return;
+        }
         toast.toast({
           title: "Order created",
           description: "Order created successfully, please wait for payment.",
@@ -108,11 +125,6 @@ const PaymentCard: React.FC<PaymentCardProps> = ({
               description: "Payment successful. Thank you for your purchase.",
               className: "bg-green-400",
             });
-          },
-          prefill: {
-            name: "John Doe",
-            email: "siddhesh@gmail.com",
-            contact: "9999999999",
           },
           theme: {
             color: "#3399cc",
@@ -156,7 +168,14 @@ const PaymentCard: React.FC<PaymentCardProps> = ({
 
         <div className="text-center mb-8">
           <p className="text-5xl font-bold text-primary">₹{paymentAmount}</p>
-          <p className="text-muted-foreground">per month</p>
+          <p className="text-muted-foreground">
+            /{" "}
+            {paymentAmount === 199
+              ? "month"
+              : paymentAmount === 499
+              ? "3 months"
+              : "6 months"}
+          </p>
         </div>
 
         <ul className="space-y-4 mb-8">

@@ -102,7 +102,7 @@ enum Currency {
 
 model Subscription {
   id       String   @id @default(cuid())
-  price    Int
+  price    Int      @unique
   currency Currency @default(INR)
   interval Int      @default(30) //* In days
   active   Boolean  @default(true)
