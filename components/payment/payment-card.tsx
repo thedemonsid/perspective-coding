@@ -3,7 +3,7 @@ import React, { useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import Script from "next/script";
-import { createOrder } from "@/actions/payment";
+import { createOrder, updateTheUserSub } from "@/actions/payment";
 import { redirect, useRouter } from "next/navigation";
 declare global {
   interface Window {
@@ -86,6 +86,14 @@ const PaymentCard: React.FC<PaymentCardProps> = ({
       try {
         const order = await createOrder(paymentAmount);
         if (!order.success) {
+          if (order.message === "User already subscribed") {
+            toast.toast({
+              title: "Error",
+              description: "User already subscribed.",
+              className: "bg-green-200",
+            });
+            return router.push("/courses");
+          }
           if (order.message === "User not Logged in") {
             toast.toast({
               title: "Error",
@@ -113,13 +121,21 @@ const PaymentCard: React.FC<PaymentCardProps> = ({
           name: "Perspective",
           description: "Professional Plan",
           order_id: order.order?.id,
-          handler: function (response: {
+          handler: async function (response: {
             razorpay_payment_id: string;
             razorpay_order_id: string;
             razorpay_signature: string;
           }) {
             console.log(response);
-
+            const res = await updateTheUserSub(response);
+            if (!res.success) {
+              toast.toast({
+                title: "Error",
+                description: "Something went wrong. Please try again later.",
+                variant: "destructive",
+              });
+              return;
+            }
             toast.toast({
               title: "Payment Successful",
               description: "Payment successful. Thank you for your purchase.",

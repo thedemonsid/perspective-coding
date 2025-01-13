@@ -2,7 +2,6 @@
 
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
-import { redirect } from "next/navigation";
 import Razorpay from "razorpay";
 import { v4 as uuidv4 } from "uuid";
 
@@ -21,9 +20,21 @@ export const createOrder = async (amount: number) => {
   const session = await auth();
   if (!session || !session.user || !session.user.id) {
     return {
-      message : "User not Logged in",
-      success : false
-    }
+      message: "User not Logged in",
+      success: false,
+    };
+  }
+  const isSubscribed = await prisma.userToSub.findFirst({
+    where: {
+      userId: session.user.id,
+      status: "ACTIVE",
+    },
+  });
+  if (isSubscribed) {
+    return {
+      message: "User already subscribed",
+      success: false,
+    };
   }
   const isValidSubcription = await prisma.subscription.findFirst({
     where: {

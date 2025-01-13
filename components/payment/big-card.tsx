@@ -3,7 +3,7 @@ import React, { useTransition } from "react";
 import { motion } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
 import Script from "next/script";
-import { createOrder } from "@/actions/payment";
+import { createOrder, updateTheUserSub } from "@/actions/payment";
 import { CheckIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -23,6 +23,14 @@ const PaymentComponent = ({ paymentAmount }: { paymentAmount: number }) => {
       try {
         const order = await createOrder(paymentAmount);
         if (!order.success) {
+          if (order.message === "User already subscribed") {
+            toast.toast({
+              title: "Error",
+              description: "User already subscribed.",
+              className: "bg-green-200",
+            });
+            return router.push("/courses");
+          }
           if (order.message === "User not Logged in") {
             toast.toast({
               title: "Error",
@@ -50,17 +58,26 @@ const PaymentComponent = ({ paymentAmount }: { paymentAmount: number }) => {
           name: "Perspective",
           description: `Subscription for ${paymentAmount}/month`,
           order_id: order.order?.id,
-          handler: function (response: {
+          handler: async function (response: {
             razorpay_payment_id: string;
             razorpay_order_id: string;
             razorpay_signature: string;
           }) {
             console.log(response);
-
+            const res = await updateTheUserSub(response);
+            if (!res.success) {
+              toast.toast({
+                title: "Error",
+                description: "Something went wrong. Please Contact the Support",
+                variant: "destructive",
+              });
+              return;
+            }
             toast.toast({
               title: "Payment Successful",
               description: "Thank you for your subscription.",
               variant: "default",
+              className: "bg-green-200",
             });
           },
           theme: {
