@@ -22,6 +22,8 @@ import {
 } from "./math-content";
 import NetworkDefenseGame from "./how-web-works/module-2/net-defense";
 import SecretMessageEncoder from "./how-web-works/module-2/network-encoder";
+import DNSDetective from "./how-web-works/module-2/dns-dectetive";
+import DNSExplorer from "./persepctive-dns";
 
 function slugify(text: string) {
   return text
@@ -264,6 +266,8 @@ const components = {
   VariableExplorer,
   NetworkDefenseGame,
   SecretMessageEncoder,
+  DNSDetective,
+  DNSExplorer,
 };
 
 export function CustomMDX(props: any) {
