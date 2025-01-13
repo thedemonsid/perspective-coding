@@ -7,12 +7,24 @@ import PaymentCard from "./payment/payment-card";
 import PaymentComponent from "./payment/big-card";
 import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
+import { numberOfUsers } from "@/lib/db/user";
 
 export default function Market() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [activeTab, setActiveTab] = useState("mathematics");
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
-
+  const [numOfUsers, setNumOfUsers] = useState(0);
+  useEffect(() => {
+    async function fetchNumOfUsers() {
+      const res = await numberOfUsers();
+      if (res < 297) {
+        setNumOfUsers(297);
+        return;
+      }
+      setNumOfUsers(res);
+    }
+    fetchNumOfUsers();
+  }, [isLoaded]);
   useEffect(() => {
     setIsLoaded(true);
   }, []);
@@ -129,7 +141,9 @@ export default function Market() {
                   ))}
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  <span className="font-semibold text-foreground">2,000+</span>{" "}
+                  <span className="font-semibold text-foreground">
+                    {numOfUsers}+
+                  </span>{" "}
                   students already learning
                 </p>
               </div>

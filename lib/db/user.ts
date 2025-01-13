@@ -1,3 +1,4 @@
+"use server";
 import { prisma } from "../prisma";
 
 export async function getUserByEmail(email: string) {
@@ -31,5 +32,15 @@ export async function getUserById(id: string) {
   } catch (error) {
     console.error(error);
     return null;
+  }
+}
+
+export async function numberOfUsers() {
+  try {
+    const count = prisma.user.count();
+    return count;
+  } catch (error) {
+    console.error(error);
+    return 297;
   }
 }

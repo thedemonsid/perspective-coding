@@ -4,8 +4,13 @@ import { notFound } from "next/navigation";
 import { CustomMDX } from "@/components/mdx/custom-mdx";
 import { formatDate } from "@/lib/format-date";
 import ProgressBar from "@/components/progress-bar";
+import { auth } from "@/auth";
 
 const Blog = async ({ params }: { params: Promise<{ slug: string }> }) => {
+  const session = await auth();
+  if (!session || !session.user || session.user.role !== "ADMIN") {
+    return notFound();
+  }
   const { slug } = await params;
   const blog = await getBlogPost(slug);
   if (!blog) {
