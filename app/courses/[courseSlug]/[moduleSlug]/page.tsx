@@ -9,14 +9,6 @@ interface LessonType {
   name: string;
 }
 
-interface ModuleType {
-  id: string;
-  name: string;
-  description: string;
-  createdAt: Date;
-  lessons: LessonType[];
-}
-
 const ConnectorLines = () => (
   <div className="absolute inset-0 overflow-hidden pointer-events-none">
     <svg className="absolute w-full h-full" style={{ zIndex: -1 }}>

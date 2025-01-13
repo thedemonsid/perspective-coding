@@ -13,13 +13,35 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Category {
+  WEB_DEVELOPMENT
+  MOBILE_DEVELOPMENT
+  DATA_SCIENCE
+  MACHINE_LEARNING
+  AI
+  BLOCKCHAIN
+  CLOUD_COMPUTING
+  DEVOPS
+  CYBER_SECURITY
+  IOT
+  AR_VR
+  GAME_DEVELOPMENT
+  MATHEMATICS
+  PHYSICS
+  CHEMISTRY
+  SCIENCE
+  SOFTWARE
+  OTHER
+}
+
 model Course {
   id String @id @default(cuid())
 
-  name        String  @unique
-  slug        String  @unique
+  name        String     @unique
+  slug        String     @unique
   description String
   image       String?
+  category    Category[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -73,6 +95,51 @@ model Lesson {
   @@map("lessons")
 }
 
+enum Currency {
+  INR
+  USD
+}
+
+model Subscription {
+  id       String   @id @default(cuid())
+  price    Int
+  currency Currency @default(INR)
+  interval Int      @default(30) //* In days
+  active   Boolean  @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  USerToSub UserToSub[]
+}
+
+enum Status {
+  ACTIVE
+  INACTIVE
+}
+
+model UserToSub {
+  id String @id @default(cuid())
+
+  razorpayOrderId   String
+  razorpayPaymentId String
+  razorpaySignature String
+
+  expiresAt DateTime
+  status    Status   @default(INACTIVE)
+
+  userId         String
+  subscriptionId String
+
+  user         User         @relation(fields: [userId], references: [id])
+  subscription Subscription @relation(fields: [subscriptionId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("user_to_sub")
+}
+
 //! User Authentication
 enum UserRole {
   ADMIN
@@ -91,6 +158,8 @@ model User {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  USerToSub UserToSub[]
 }
 
 model Account {

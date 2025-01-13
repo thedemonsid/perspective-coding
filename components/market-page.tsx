@@ -80,7 +80,7 @@ export default function Market() {
 
       {/* Hero Section - Improved spacing and alignment */}
       <section className="min-h-[90vh] bg-background relative">
-        <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-background/5" />
+        <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-background/5 -z-10" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
           <div className="grid lg:grid-cols-2 gap-16 items-center pt-32 lg:pt-20 h-full pb-16">
             <motion.div

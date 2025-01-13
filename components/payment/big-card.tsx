@@ -7,6 +7,7 @@ import { CheckIcon } from "lucide-react";
 
 declare global {
   interface Window {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     Razorpay: any;
   }
 }
@@ -31,7 +32,13 @@ const PaymentComponent = () => {
           name: "Perspective",
           description: "Subscription fo259/month",
           order_id: order.order?.id,
-          handler: function (response: any) {
+          handler: function (response: {
+            razorpay_payment_id: string;
+            razorpay_order_id: string;
+            razorpay_signature: string;
+          }) {
+            console.log(response);
+
             toast.toast({
               title: "Payment Successful",
               description: "Thank you for your subscription.",

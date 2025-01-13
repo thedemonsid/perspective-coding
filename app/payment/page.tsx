@@ -1,10 +1,10 @@
-import PaymentComponent from "@/components/payment/payment-component";
+import PaymentComponent from "@/components/payment/payment-card";
 import React from "react";
 
 const PaymentPage = () => {
   return (
     <div>
-      <PaymentComponent></PaymentComponent>
+      <PaymentComponent paymentAmount={500}></PaymentComponent>
     </div>
   );
 };

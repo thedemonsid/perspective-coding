@@ -9,7 +9,6 @@ interface LogoutButtonProps {
 export const LogoutButton: React.FC<LogoutButtonProps> = ({
   children,
   mode = "redirect",
-  asChild,
 }) => {
   const router = useRouter();
   const onClick = async () => {

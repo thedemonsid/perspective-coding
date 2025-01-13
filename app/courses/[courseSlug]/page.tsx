@@ -87,9 +87,14 @@ function ModuleCard({
   );
 }
 
-async function CoursePage({ params }: { params: { courseSlug: string } }) {
+async function CoursePage({
+  params,
+}: {
+  params: Promise<{ courseSlug: string }>;
+}) {
+  const { courseSlug } = await params;
   const course = await prisma.course.findUnique({
-    where: { slug: params.courseSlug },
+    where: { slug: courseSlug },
     include: {
       modules: {
         orderBy: { index: "asc" },
@@ -121,7 +126,7 @@ async function CoursePage({ params }: { params: { courseSlug: string } }) {
             <ModuleCard
               key={module.id}
               module={module}
-              courseSlug={params.courseSlug}
+              courseSlug={courseSlug}
             />
           ))}
         </div>

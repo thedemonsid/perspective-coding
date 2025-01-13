@@ -10,29 +10,24 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { FormError } from "./form-error";
-import { FormSuccess } from "./form-success";
-import { login } from "@/actions/login";
-import { useState, useTransition } from "react";
-import { useSearchParams } from "next/navigation";
-import Link from "next/link";
+// import { login } from "@/actions/login";
+// import { useState, useTransition } from "react";
+// import { useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { FaGoogle, FaGithub } from "react-icons/fa";
-import GitHub from "next-auth/providers/github";
 
 export const LoginForm = () => {
-  const searchParams = useSearchParams();
-  const urlError =
-    searchParams.get("error") === "OAuthAccountNotLinked"
-      ? "Account Already Exists with this email"
-      : "";
-  const [isPending, startTransition] = useTransition();
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  // const searchParams = useSearchParams();
+  // const urlError =
+  //   searchParams.get("error") === "OAuthAccountNotLinked"
+  //     ? "Account Already Exists with this email"
+  //     : "";
+  // const [isPending, startTransition] = useTransition();
+  // const [error, setError] = useState("");
+  // const [success, setSuccess] = useState("");
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
@@ -40,22 +35,22 @@ export const LoginForm = () => {
       password: "",
     },
   });
-  const onSubmit = () => {
-    setError("");
-    setSuccess("");
-    const formValues = form.getValues();
+  // const onSubmit = () => {
+  //   setError("");
+  //   setSuccess("");
+  //   const formValues = form.getValues();
 
-    startTransition(async () => {
-      const response = await login(formValues);
-      if (response.success) {
-        setSuccess(response.message);
-        form.reset();
-      } else {
-        setError(response.message);
-      }
-      console.log(response);
-    });
-  };
+  //   startTransition(async () => {
+  //     const response = await login(formValues);
+  //     if (response.success) {
+  //       setSuccess(response.message);
+  //       form.reset();
+  //     } else {
+  //       setError(response.message);
+  //     }
+  //     console.log(response);
+  //   });
+  // };
   return (
     <CardWrapper
       headerLabel="Welcome back!"

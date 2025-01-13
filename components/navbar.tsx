@@ -15,15 +15,20 @@ import {
 } from "./ui/dropdown-menu";
 import { LogOut } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { useSession } from "next-auth/react";
+import { Session } from "next-auth";
 
 const navItems = [{ name: "Courses", href: "/courses" }];
 
-const UserMenu = ({ session }) => (
+const UserMenu = ({ session }: { session: Session }) => (
   <DropdownMenu>
     <DropdownMenuTrigger asChild>
       <Button variant="ghost" className="relative h-8 w-8 rounded-full">
         <Avatar className="h-8 w-8">
-          <AvatarImage src={session?.Avatar} alt={session?.user?.name} />
+          <AvatarImage
+            src={session?.user.image || ""}
+            alt={session?.user?.name || "User Image"}
+          />
           <AvatarFallback>{session?.user?.name?.[0]}</AvatarFallback>
         </Avatar>
       </Button>
@@ -37,9 +42,9 @@ const UserMenu = ({ session }) => (
   </DropdownMenu>
 );
 
-const Navbar = ({ session }) => {
+const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-
+  const { data: session } = useSession();
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 border-b border-border/40">
       <div className="absolute inset-0 bg-background/80 backdrop-blur-xl" />
@@ -75,6 +80,14 @@ const Navbar = ({ session }) => {
                 {item.name}
               </Link>
             ))}
+            {session && session?.user.role === "ADMIN" && (
+              <Link
+                href="/admin"
+                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Admin
+              </Link>
+            )}
             {session ? (
               <UserMenu session={session} />
             ) : (

@@ -6,6 +6,7 @@ import Script from "next/script";
 import { createOrder } from "@/actions/payment";
 declare global {
   interface Window {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     Razorpay: any;
   }
 }
@@ -34,7 +35,13 @@ const PaymentCard: React.FC<PaymentCardProps> = ({ paymentAmount }) => {
           name: "Perspective",
           description: "Professional Plan",
           order_id: order.order?.id,
-          handler: function (response: any) {
+          handler: function (response: {
+            razorpay_payment_id: string;
+            razorpay_order_id: string;
+            razorpay_signature: string;
+          }) {
+            console.log(response);
+
             toast.toast({
               title: "Payment Successful",
               description: "Payment successful. Thank you for your purchase.",

@@ -3,9 +3,9 @@ import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 import NavBar from "@/components/navbar";
 import Footer from "@/components/footer";
-import { auth } from "@/auth";
 import { Toaster } from "@/components/ui/toaster";
 
+import { SessionProvider } from "next-auth/react";
 export const metadata: Metadata = {
   title: "Vdsidiously",
   description:
@@ -15,18 +15,19 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await auth();
-
   return (
     <html lang="en" suppressHydrationWarning className="scroll-smooth">
       <body className={`antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="system">
-          <NavBar session={session}></NavBar>
+          <SessionProvider>
+            {" "}
+            <NavBar></NavBar>
+          </SessionProvider>
           {children}
           <Footer></Footer>
           <Toaster></Toaster>

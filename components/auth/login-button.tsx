@@ -23,7 +23,6 @@ interface LoginButtonProps {
 export const LoginButton: React.FC<LoginButtonProps> = ({
   children,
   mode = "redirect",
-  asChild,
   className,
 }) => {
   const router = useRouter();
@@ -33,6 +32,8 @@ export const LoginButton: React.FC<LoginButtonProps> = ({
   const handleLogin = async (provider: "google" | "github") => {
     try {
       setLoading(true);
+      console.log(provider);
+
       // Implement your auth logic here
       router.push("/auth/login");
     } catch (error) {

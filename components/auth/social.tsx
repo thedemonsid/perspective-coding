@@ -10,7 +10,7 @@ export const Social = () => {
   const [isDark, setIsDark] = React.useState(false);
   useEffect(() => {
     setIsDark(theme.theme === "dark");
-  });
+  }, [theme.theme]);
 
   return (
     <div className="flex items-center gap-x-2 w-full">

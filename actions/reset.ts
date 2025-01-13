@@ -1,6 +1,6 @@
 "use server";
 
-import { getUserByEmail } from "@/lib/db/user";
+// import { getUserByEmail } from "@/lib/db/user";
 import { ResetPasswordSchema } from "@/zod-schema";
 import * as z from "zod";
 
@@ -12,14 +12,14 @@ export const reset = async (values: z.infer<typeof ResetPasswordSchema>) => {
       message: "Invalid input",
     };
   }
-  const { email } = parsedValues.data;
-  const existingUser = await getUserByEmail(email);
-  if (!existingUser) {
-    return {
-      success: false,
-      message: "User not found",
-    };
-  }
+  // const { email } = parsedValues.data;
+  // const existingUser = await getUserByEmail(email);
+  // if (!existingUser) {
+  //   return {
+  //     success: false,
+  //     message: "User not found",
+  //   };
+  // }
 
   // TODO: Implement password reset logic here
 

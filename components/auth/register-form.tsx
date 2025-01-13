@@ -34,6 +34,7 @@ export const RegisterForm = () => {
     setError("");
     setSuccess("");
     const formValues = form.getValues();
+    console.log(isPending);
 
     startTransition(async () => {
       const response = await register(formValues);
@@ -66,13 +67,15 @@ export const RegisterForm = () => {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel htmlFor="name">name</FormLabel>
+                  <FormLabel htmlFor="name" className="text-muted">
+                    name
+                  </FormLabel>
                   <FormControl>
                     <Input
                       {...field}
                       id="name"
                       type="text"
-                      disabled={isPending}
+                      disabled={true}
                       placeholder="Siddhesh Shrirame "
                     />
                   </FormControl>
@@ -85,13 +88,15 @@ export const RegisterForm = () => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel htmlFor="email">Email</FormLabel>
+                  <FormLabel htmlFor="email" className="text-muted">
+                    Email
+                  </FormLabel>
                   <FormControl>
                     <Input
                       {...field}
                       id="email"
                       type="email"
-                      disabled={isPending}
+                      disabled={true}
                       placeholder="siddhesh@gmail.com "
                     />
                   </FormControl>
@@ -104,14 +109,16 @@ export const RegisterForm = () => {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel htmlFor="password">Password</FormLabel>
+                  <FormLabel htmlFor="password" className="text-muted">
+                    Password
+                  </FormLabel>
                   <FormControl>
                     <Input
                       {...field}
                       id="password"
                       type="password"
                       placeholder="*******"
-                      disabled={isPending}
+                      disabled={true}
                     />
                   </FormControl>
                   <FormMessage></FormMessage>
@@ -121,7 +128,7 @@ export const RegisterForm = () => {
           </div>
           <FormError message={error}></FormError>
           <FormSuccess message={success}></FormSuccess>
-          <Button type="submit" className="w-full" disabled={isPending}>
+          <Button type="submit" className="w-full" disabled={true}>
             Register
           </Button>
         </form>

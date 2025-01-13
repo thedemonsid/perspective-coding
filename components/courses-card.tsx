@@ -2,17 +2,21 @@ import React from "react";
 import { Lock, ChevronRight, CheckCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Toast } from "@/components/ui/toast";
-
-const CourseCard = ({ course, onComplete }) => {
+import { useToast } from "@/hooks/use-toast";
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const CourseCard = ({ course }: { course: any }) => {
   const router = useRouter();
   const isLocked = course.status === "locked";
-
-  const handleCourseAccess = async (e) => {
+  const toast = useToast();
+  const handleCourseAccess = async (
+    e:
+      | React.MouseEvent<HTMLDivElement, MouseEvent>
+      | React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
     e.preventDefault();
 
     if (isLocked) {
-      toast({
+      toast.toast({
         title: "Course Locked",
         description: "Complete the previous level to unlock this course.",
         variant: "destructive",
@@ -22,8 +26,9 @@ const CourseCard = ({ course, onComplete }) => {
 
     router.push(`/courses/${course.slug}`);
   };
-
-  const handleMarkAsCompleted = async (e) => {
+  const handleMarkAsCompleted = async (
+    e: React.MouseEvent<HTMLButtonElement> | React.MouseEvent<HTMLAnchorElement>
+  ) => {
     e.preventDefault();
     e.stopPropagation();
 
@@ -40,12 +45,11 @@ const CourseCard = ({ course, onComplete }) => {
       }
 
       const data = await response.json();
-      onComplete?.(course.id);
 
-      Toast({
+      toast.toast({
         title: "Success!",
         description: "Course marked as completed successfully.",
-        variant: "success",
+        className: "bg-green-200",
       });
 
       // Optionally redirect to the next course if available
@@ -53,7 +57,9 @@ const CourseCard = ({ course, onComplete }) => {
         router.push(`/courses/${data.nextCourseSlug}`);
       }
     } catch (error) {
-      toast({
+      console.log(error);
+
+      toast.toast({
         title: "Error",
         description: "Failed to mark course as completed. Please try again.",
         variant: "destructive",

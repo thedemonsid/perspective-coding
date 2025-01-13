@@ -33,7 +33,7 @@ const EmailVerificationPage = () => {
       }
     }
     setError("Invalid token or email");
-  }, [token, email]);
+  }, [token, email, router, toast]);
   useEffect(() => {
     onSubmit();
   }, [onSubmit]);
