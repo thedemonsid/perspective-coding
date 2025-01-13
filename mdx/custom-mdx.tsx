@@ -11,9 +11,9 @@ import { cn } from "@/lib/utils";
 import ServiceMatchGame from "@/mdx/match-the-pairs";
 import Quizcomponent from "./quizcomponent";
 import InfoCard from "./doyouknowcard";
-import PacketJourneyDemo from "./packet-journey";
-import PacketRoutingGame from "./find-route";
-import HomeNetworkFinder from "./virt-home";
+import PacketJourneyDemo from "./how-web-works/module-2/packet-journey";
+import PacketRoutingGame from "./how-web-works/module-2/find-route";
+import HomeNetworkFinder from "./how-web-works/module-1/virt-home";
 import {
   LemonadeCalculator,
   PatternRecognitionGame,
