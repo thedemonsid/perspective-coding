@@ -38,7 +38,7 @@ export default function QuizComponent({
   }
 
   return (
-    <Card className="w-full max-w-2xl mx-auto border bg-card shadow-lg">
+    <Card className="w-full max-w-2xl mx-auto border bg-card shadow-lg m-3">
       <CardContent className="p-4 sm:p-6 md:p-8 space-y-6 sm:space-y-8">
         <motion.h3
           className="text-lg sm:text-xl md:text-2xl font-semibold text-foreground leading-relaxed"

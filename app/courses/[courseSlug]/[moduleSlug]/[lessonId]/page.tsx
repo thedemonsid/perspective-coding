@@ -6,20 +6,16 @@ import { parseMDXContent } from "@/lib/parseMDX";
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 
-const Chapter = async ({
-  params,
-}: {
-  params: Promise<{
-    courseSlug: string;
-    moduleSlug: string;
-    lessonId: string;
-  }>;
-}) => {
+interface ChapterParams {
+  courseSlug: string;
+  moduleSlug: string;
+  lessonId: string;
+}
+
+const Chapter = async ({ params }: { params: Promise<ChapterParams> }) => {
   const { lessonId } = await params;
   const lesson = await prisma.lesson.findUnique({
-    where: {
-      id: lessonId,
-    },
+    where: { id: lessonId },
   });
 
   if (!lesson) {
@@ -30,46 +26,32 @@ const Chapter = async ({
   const blog = { metadata, content };
 
   return (
-    <div className="min-h-screen w-full">
-      {/* Progress bar */}
+    <div className="min-h-screen">
       <ProgressBar />
-      {/* Main container with padding that adapts to screen size */}
-      <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 pt-16 pb-20">
-        {/* Header section */}
-        <header className="space-y-4 mb-8">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight break-words">
-            {blog.metadata.title}
-          </h1>
 
-          {/* Meta information */}
-          <div className="flex flex-wrap items-center gap-2 text-sm text-gray-600">
-            <time dateTime={blog.metadata.publishedAt}>
-              {formatDate(blog.metadata.publishedAt)}
-            </time>
-            <span className="hidden sm:inline">•</span>
-            <span>{blog.metadata.author}</span>
-          </div>
-
-          {/* Summary section with responsive padding */}
-          <div className="mt-4 prose prose-gray prose-sm sm:prose-base lg:prose-lg max-w-none">
-            <p className="text-gray-600">{blog.metadata.summary}</p>
-          </div>
+      <div className="max-w-4xl mx-auto p-6 font-wotfard pt-16">
+        <header className="mb-8">
+          <h1 className="text-4xl font-bold mb-4">{blog.metadata.title}</h1>
+          <p className="text-gray-500 mb-2">
+            {formatDate(blog.metadata.publishedAt)}
+            <span className="text-foreground px-2 mx-2">
+              {blog.metadata.author}
+            </span>
+          </p>
+          <p className="text-gray-700">{blog.metadata.summary}</p>
         </header>
 
-        {/* Main content */}
-        <article className="prose prose-gray prose-sm sm:prose-base lg:prose-lg max-w-none">
+        <article className="prose max-w-none mb-8 [&>*]:mb-6 [&_pre]:mb-8 [&_pre]:mt-8 [&_.game-component]:my-12 [&_h2]:mt-12 [&_h3]:mt-8">
           <CustomMDX source={blog.content} />
         </article>
 
-        {/* Footer meta information */}
-        <footer className="mt-8 pt-4 border-t border-gray-200">
-          <div className="flex flex-wrap items-center gap-2 text-sm text-gray-600">
-            <time dateTime={blog.metadata.publishedAt}>
-              {formatDate(blog.metadata.publishedAt)}
-            </time>
-            <span className="hidden sm:inline">•</span>
-            <span>{blog.metadata.author}</span>
-          </div>
+        <footer className="border-t pt-6">
+          <p className="text-gray-500">
+            {formatDate(blog.metadata.publishedAt)}
+            <span className="text-foreground px-2 mx-2">
+              {blog.metadata.author}
+            </span>
+          </p>
         </footer>
       </div>
     </div>

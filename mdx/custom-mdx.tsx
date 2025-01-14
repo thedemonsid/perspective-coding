@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { MDXRemote } from "next-mdx-remote/rsc";
+
+import { Lightbulb } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -24,6 +26,7 @@ import NetworkDefenseGame from "./how-web-works/module-2/net-defense";
 import SecretMessageEncoder from "./how-web-works/module-2/network-encoder";
 import DNSDetective from "./how-web-works/module-2/dns-dectetive";
 import DNSExplorer from "./persepctive-dns";
+import NetworkMazeGame from "./how-web-works/module-2/network-maze";
 
 function slugify(text: string) {
   return text
@@ -141,20 +144,50 @@ function Code({ children, className }: any) {
   );
 }
 
-function BlockQuote(props: any) {
+const BlockQuote = (
+  props: React.JSX.IntrinsicAttributes &
+    React.ClassAttributes<HTMLQuoteElement> &
+    React.BlockquoteHTMLAttributes<HTMLQuoteElement>
+) => {
   return (
     <blockquote
       {...props}
-      className={cn(
-        "my-8 border-l-2 border-primary/60 pl-6",
-        "bg-muted/50 py-4 pr-4 rounded-r-lg",
-        "italic text-muted-foreground",
-        "[&>*]:mt-0 [&>*:not(:first-child)]:mt-4"
-      )}
-    />
-  );
-}
+      className={[
+        // Base styles
+        "my-6 mx-10",
+        "border-l-4 border-primary",
+        "bg-primary/60 dark:bg-primary/10",
 
+        // Padding and rounded corners
+        "p-6 rounded-r-lg",
+
+        // Typography
+        "text-lg text-muted-foreground",
+        "font-serif italic",
+
+        // Subtle hover effect
+        "transition-all duration-300",
+        "hover:bg-primary/10 dark:hover:bg-primary/15",
+
+        // Interior spacing
+        "[&>*]:mt-0 [&>*:not(:first-child)]:mt-4",
+
+        // Box shadow
+        "shadow-md hover:shadow-xl",
+
+        // Additional decorative elements
+        "relative",
+        "after:content-[''] after:absolute after:top-0 after:left-0",
+        "after:w-1 after:h-full after:bg-primary/50",
+        "after:rounded-l-sm after:transition-all",
+        "hover:after:h-[calc(100%+8px)] hover:after:-top-1",
+      ].join(" ")}
+    >
+      <Lightbulb className="text-primary " />
+      {props.children}
+    </blockquote>
+  );
+};
 function Table({ data }: any) {
   return (
     <div className="my-8 w-full overflow-hidden rounded-lg border border-border/60">
@@ -268,6 +301,8 @@ const components = {
   SecretMessageEncoder,
   DNSDetective,
   DNSExplorer,
+  NetworkMazeGame,
+  BlockQuote,
 };
 
 export function CustomMDX(props: any) {

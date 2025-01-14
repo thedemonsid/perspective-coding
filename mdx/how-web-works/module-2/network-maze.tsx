@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Card } from "@/components/ui/card";
@@ -291,7 +292,7 @@ const NetworkMazeGame = () => {
   );
 
   return (
-    <Card className="p-4 sm:p-8 w-full max-w-md sm:max-w-2xl mx-auto bg-gradient-to-br from-background/80 to-background/50 border-border/50">
+    <Card className="p-4 sm:p-8 w-full max-w-2xl sm:max-w-2xl mx-auto bg-gradient-to-br from-background/80 to-background/50 border-border/50">
       <div className="flex flex-col items-center space-y-4 sm:space-y-8">
         <div className="flex flex-col sm:flex-row justify-between items-center w-full gap-4">
           <div className="text-center sm:text-left">
