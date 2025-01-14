@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import Script from "next/script";
 import { createOrder, updateTheUserSub } from "@/actions/payment";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 declare global {
   interface Window {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

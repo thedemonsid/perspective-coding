@@ -1,177 +1,256 @@
 "use client";
-import React, { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import React, { useState, useEffect } from "react";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Smartphone, Search, Check, Shield } from "lucide-react";
+import { Laptop, Wifi, Eye, AlertTriangle, Check, X } from "lucide-react";
 
-const HomeNetworkFinder = () => {
-  const [searchActive, setSearchActive] = useState(false);
-  const [foundDevices, setFoundDevices] = useState<Array<any>>([]); // eslint-disable-line @typescript-eslint/no-explicit-any
-  const [gameComplete, setGameComplete] = useState(false);
+interface Device {
+  id: number;
+  name: string;
+  icon: React.ElementType;
+  type: string;
+  vulnerabilities: string[];
+  isCompromised?: boolean;
+  hint?: string;
+}
 
-  const devices = [
-    {
-      id: 1,
-      name: "Smart Device Hub",
-      icon: Smartphone,
-      hint: "Your personal command center for digital communication",
-      confidence: "99.9% match",
-    },
-    {
-      id: 2,
-      name: "Smart Security Camera",
-      icon: Search,
-      hint: "24/7 surveillance system for your home",
-      confidence: "95.5% match",
-    },
-    {
-      id: 3,
-      name: "Network Router",
-      icon: Shield,
-      hint: "Core network infrastructure device",
-      confidence: "98.7% match",
-    },
-    {
-      id: 4,
-      name: "Smart Thermostat",
-      icon: Smartphone,
-      hint: "Temperature control system",
-      confidence: "97.2% match",
-    },
-  ];
+const SCENARIOS = [
+  {
+    title: "Home Network Check",
+    devices: [
+      {
+        id: 1,
+        name: "Family Laptop",
+        icon: Laptop,
+        type: "Computer",
+        vulnerabilities: ["outdatedSoftware"],
+        hint: "When was the last update installed?",
+      },
+      {
+        id: 2,
+        name: "Gaming Console",
+        icon: Laptop,
+        type: "Entertainment",
+        vulnerabilities: [],
+        hint: "Looks secure and up to date!",
+      },
+      {
+        id: 3,
+        name: "Smart TV",
+        icon: Laptop,
+        type: "Entertainment",
+        vulnerabilities: ["weakPassword"],
+        hint: "Is 'password123' really secure?",
+      },
+      {
+        id: 4,
+        name: "WiFi Router",
+        icon: Wifi,
+        type: "Network",
+        vulnerabilities: [],
+        hint: "Recently updated firmware.",
+      },
+    ],
+    lesson: "Always keep your devices updated and use strong passwords!",
+  },
+  {
+    id: 2,
+    title: "Public WiFi Safety",
+    devices: [
+      {
+        id: 1,
+        name: "Coffee Shop WiFi",
+        icon: Wifi,
+        type: "Network",
+        vulnerabilities: ["unsecuredNetwork"],
+        hint: "No password required... suspicious?",
+      },
+      {
+        id: 2,
+        name: "Library Network",
+        icon: Wifi,
+        type: "Network",
+        vulnerabilities: [],
+        hint: "Protected with WPA3 encryption.",
+      },
+      {
+        id: 3,
+        name: "Free Airport WiFi",
+        icon: Wifi,
+        type: "Network",
+        vulnerabilities: ["manInMiddle"],
+        hint: "Multiple networks with similar names...",
+      },
+    ],
+    lesson: "Be careful when connecting to public WiFi networks!",
+  },
+  // Add more scenarios...
+];
 
-  const startSearch = () => {
-    setSearchActive(true);
-    let foundCount = 0;
+const NetworkSecurityGame = () => {
+  const [currentScenario, setCurrentScenario] = useState(0);
+  const [selectedDevices, setSelectedDevices] = useState<number[]>([]);
+  const [gameState, setGameState] = useState<
+    "playing" | "checking" | "complete"
+  >("playing");
+  const [score, setScore] = useState(0);
+  const [feedback, setFeedback] = useState("");
+  const [showHints, setShowHints] = useState(false);
 
-    // Simulate finding devices one by one
-    const interval = setInterval(() => {
-      if (foundCount < devices.length) {
-        setFoundDevices((prev) => [...prev, devices[foundCount]]);
-        foundCount++;
-      } else {
-        clearInterval(interval);
-        setGameComplete(true);
-      }
-    }, 1000); // Find a new device every second
+  const handleDeviceClick = (deviceId: number) => {
+    if (gameState !== "playing") return;
+
+    setSelectedDevices((prev) =>
+      prev.includes(deviceId)
+        ? prev.filter((id) => id !== deviceId)
+        : [...prev, deviceId]
+    );
   };
 
-  const resetSearch = () => {
-    setSearchActive(false);
-    setFoundDevices([]);
-    setGameComplete(false);
-  };
+  const checkAnswers = () => {
+    const scenario = SCENARIOS[currentScenario];
+    const vulnerableDevices = scenario.devices
+      .filter((d) => d.vulnerabilities.length > 0)
+      .map((d) => d.id);
 
-  const getProgress = () => {
-    return (foundDevices.length / devices.length) * 100;
+    const correctAnswers =
+      selectedDevices.every((id) => vulnerableDevices.includes(id)) &&
+      selectedDevices.length === vulnerableDevices.length;
+
+    setGameState("checking");
+    setFeedback(
+      correctAnswers
+        ? "Great job! You found all the vulnerable devices!"
+        : "Not quite right. Try again!"
+    );
+
+    if (correctAnswers) {
+      setScore((prev) => prev + 100);
+      setTimeout(() => {
+        if (currentScenario < SCENARIOS.length - 1) {
+          setCurrentScenario((prev) => prev + 1);
+          setSelectedDevices([]);
+          setGameState("playing");
+        } else {
+          setGameState("complete");
+        }
+      }, 2000);
+    } else {
+      setTimeout(() => {
+        setGameState("playing");
+      }, 2000);
+    }
   };
 
   return (
-    <Card className="w-full max-w-2xl">
-      <CardHeader className="border-b bg-card">
-        <CardTitle className="flex justify-between items-center text-card-foreground">
-          <span className="flex items-center gap-2">
-            <Shield className="text-primary" />
-            Network Security Scanner
-          </span>
-          {searchActive && (
-            <span className="font-mono text-muted-foreground">
-              {foundDevices.length}/{devices.length} Devices
-            </span>
-          )}
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="p-6 bg-background">
-        <div className="space-y-6">
-          {searchActive && (
-            <div className="w-full bg-secondary/20 rounded-full h-2">
-              <div
-                className="bg-primary h-2 rounded-full transition-all duration-500"
-                style={{ width: `${getProgress()}%` }}
-              />
-            </div>
-          )}
-
-          {!searchActive ? (
-            <div className="text-center space-y-4">
-              <p className="text-muted-foreground text-lg">
-                Initiate secure network scan to discover connected devices
-              </p>
-              <button
-                onClick={startSearch}
-                className="inline-flex items-center gap-2 px-8 py-4 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
-              >
-                <Search className="w-5 h-5" />
-                Begin Security Scan
-              </button>
-            </div>
-          ) : (
-            <div className="space-y-4">
-              {devices.map((device) => {
-                const isFound = foundDevices.find((id) => id.id === device.id);
-                return (
-                  <div
-                    key={device.id}
-                    className={cn(
-                      "flex items-center gap-4 p-4 rounded-lg border transition-all duration-300",
-                      isFound
-                        ? "border-primary bg-primary/5 shadow-sm"
-                        : "border-border"
-                    )}
-                  >
-                    <div
-                      className={cn(
-                        "w-12 h-12 flex items-center justify-center rounded-full",
-                        isFound ? "bg-primary/10" : "bg-muted"
-                      )}
-                    >
-                      {React.createElement(device.icon, {
-                        className: isFound
-                          ? "text-primary"
-                          : "text-muted-foreground",
-                      })}
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="font-medium text-foreground">
-                        {device.name}
-                      </h3>
-                      <p className="text-sm text-muted-foreground">
-                        {device.hint}
-                      </p>
-                      {isFound && (
-                        <p className="text-xs text-primary/90 mt-1">
-                          {device.confidence}
-                        </p>
-                      )}
-                    </div>
-                    <div className="w-8 h-8 flex items-center justify-center">
-                      {isFound ? (
-                        <Check className="text-primary w-6 h-6" />
-                      ) : (
-                        <div className="w-4 h-4 rounded-full bg-muted animate-pulse" />
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
-
-              {gameComplete && (
-                <div className="text-center pt-6">
-                  <p className="text-primary mb-4">Network scan complete!</p>
-                  <button
-                    onClick={resetSearch}
-                    className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
-                  >
-                    Run New Scan
-                  </button>
-                </div>
-              )}
-            </div>
-          )}
+    <Card className="w-full max-w-3xl p-6 space-y-6">
+      <div className="space-y-2">
+        <div className="flex justify-between items-center">
+          <h2 className="text-2xl font-bold">Network Detective</h2>
+          <div className="flex items-center gap-4">
+            <span className="text-sm font-medium">Score: {score}</span>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowHints(!showHints)}
+            >
+              <Eye className="w-4 h-4 mr-2" />
+              {showHints ? "Hide" : "Show"} Hints
+            </Button>
+          </div>
         </div>
-      </CardContent>
+        <p className="text-muted-foreground">
+          Find the vulnerable devices in each scenario!
+        </p>
+      </div>
+
+      <div className="space-y-4">
+        <h3 className="text-lg font-semibold">
+          Scenario {currentScenario + 1}: {SCENARIOS[currentScenario].title}
+        </h3>
+
+        <div className="grid grid-cols-2 gap-4">
+          {SCENARIOS[currentScenario].devices.map((device) => (
+            <div
+              key={device.id}
+              onClick={() => handleDeviceClick(device.id)}
+              className={cn(
+                "p-4 rounded-lg border-2 cursor-pointer transition-all",
+                "hover:border-primary/50",
+                selectedDevices.includes(device.id)
+                  ? "border-primary bg-primary/5"
+                  : "border-border",
+                gameState === "checking" &&
+                  device.vulnerabilities.length > 0 &&
+                  "border-red-500 bg-red-500/5"
+              )}
+            >
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                  {React.createElement(device.icon, {
+                    className: "w-5 h-5 text-primary",
+                  })}
+                </div>
+                <div className="flex-1">
+                  <h4 className="font-medium">{device.name}</h4>
+                  <p className="text-sm text-muted-foreground">{device.type}</p>
+                  {showHints && (
+                    <p className="text-xs text-primary/80 mt-2">
+                      💡 {device.hint}
+                    </p>
+                  )}
+                </div>
+                {gameState === "checking" && (
+                  <div className="w-6 h-6">
+                    {device.vulnerabilities.length > 0 ? (
+                      <AlertTriangle className="text-red-500" />
+                    ) : (
+                      <Check className="text-green-500" />
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {gameState === "checking" && (
+          <div className="text-center p-4 rounded-lg bg-primary/5">
+            <p className="font-medium">{feedback}</p>
+            <p className="text-sm text-muted-foreground mt-2">
+              {SCENARIOS[currentScenario].lesson}
+            </p>
+          </div>
+        )}
+
+        {gameState === "complete" ? (
+          <div className="text-center space-y-4">
+            <h3 className="text-xl font-bold">Game Complete! 🎉</h3>
+            <p>Final Score: {score}</p>
+            <Button
+              onClick={() => {
+                setCurrentScenario(0);
+                setScore(0);
+                setSelectedDevices([]);
+                setGameState("playing");
+              }}
+            >
+              Play Again
+            </Button>
+          </div>
+        ) : (
+          <Button
+            className="w-full"
+            onClick={checkAnswers}
+            disabled={selectedDevices.length === 0 || gameState === "checking"}
+          >
+            Check Vulnerabilities
+          </Button>
+        )}
+      </div>
     </Card>
   );
 };
 
-export default HomeNetworkFinder;
+export default NetworkSecurityGame;
