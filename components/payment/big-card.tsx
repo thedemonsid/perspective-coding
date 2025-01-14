@@ -3,7 +3,7 @@ import React, { useTransition } from "react";
 import { motion } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
 import Script from "next/script";
-import { createOrder, updateTheUserSub } from "@/actions/payment";
+import { createOrder } from "@/actions/payment";
 import { CheckIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -64,21 +64,21 @@ const PaymentComponent = ({ paymentAmount }: { paymentAmount: number }) => {
             razorpay_signature: string;
           }) {
             console.log(response);
-            const res = await updateTheUserSub(response);
-            if (!res.success) {
-              toast.toast({
-                title: "Error",
-                description: "Something went wrong. Please Contact the Support",
-                variant: "destructive",
-              });
-              return;
-            }
-            toast.toast({
-              title: "Payment Successful",
-              description: "Thank you for your subscription.",
-              variant: "default",
-              className: "bg-green-200",
-            });
+            // const res = await updateTheUserSub(response);
+            // if (!res.success) {
+            //   toast.toast({
+            //     title: "Error",
+            //     description: "Something went wrong. Please Contact the Support",
+            //     variant: "destructive",
+            //   });
+            //   return;
+            // }
+            // toast.toast({
+            //   title: "Payment Successful",
+            //   description: "Thank you for your subscription.",
+            //   variant: "default",
+            //   className: "bg-green-200",
+            // });
           },
           theme: {
             color: "#3399cc",

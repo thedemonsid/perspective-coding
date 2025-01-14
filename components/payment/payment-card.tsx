@@ -3,7 +3,7 @@ import React, { useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import Script from "next/script";
-import { createOrder, updateTheUserSub } from "@/actions/payment";
+import { createOrder } from "@/actions/payment";
 import { useRouter } from "next/navigation";
 declare global {
   interface Window {
@@ -127,20 +127,20 @@ const PaymentCard: React.FC<PaymentCardProps> = ({
             razorpay_signature: string;
           }) {
             console.log(response);
-            const res = await updateTheUserSub(response);
-            if (!res.success) {
-              toast.toast({
-                title: "Error",
-                description: "Something went wrong. Please try again later.",
-                variant: "destructive",
-              });
-              return;
-            }
-            toast.toast({
-              title: "Payment Successful",
-              description: "Payment successful. Thank you for your purchase.",
-              className: "bg-green-400",
-            });
+            // const res = await updateTheUserSub(response);
+            // if (!res.success) {
+            //   toast.toast({
+            //     title: "Error",
+            //     description: "Something went wrong. Please try again later.",
+            //     variant: "destructive",
+            //   });
+            //   return;
+            // }
+            // toast.toast({
+            //   title: "Payment Successful",
+            //   description: "Payment successful. Thank you for your purchase.",
+            //   className: "bg-green-400",
+            // });
           },
           theme: {
             color: "#3399cc",
