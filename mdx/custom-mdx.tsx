@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 import { MDXRemote } from "next-mdx-remote/rsc";
 
 import { Lightbulb } from "lucide-react";
@@ -27,6 +25,8 @@ import SecretMessageEncoder from "./how-web-works/module-2/network-encoder";
 import DNSDetective from "./how-web-works/module-2/dns-dectetive";
 import DNSExplorer from "./persepctive-dns";
 import NetworkMazeGame from "./how-web-works/module-2/network-maze";
+import DNSPlayground from "./how-web-works/module-2/dns-playground";
+import PacketSorter from "./how-web-works/module-2/find-route";
 
 function slugify(text: string) {
   return text
@@ -44,22 +44,33 @@ function createHeading(level: HeadingLevel) {
     const slug = slugify(children);
 
     const headingClasses = {
-      1: "scroll-m-20 text-4xl font-bold tracking-tight mt-16 mb-6 text-foreground/90 first:mt-8",
-      2: "scroll-m-20 text-3xl font-semibold tracking-tight mt-12 mb-6 text-foreground/90 border-b border-border/40 pb-2 first:mt-0",
-      3: "scroll-m-20 text-2xl font-semibold tracking-tight mt-10 mb-4 text-foreground/80",
-      4: "scroll-m-20 text-xl font-semibold tracking-tight mt-8 mb-4 text-foreground/80",
-      5: "scroll-m-20 text-lg font-medium tracking-tight mt-6 mb-3 text-foreground/70",
-      6: "scroll-m-20 text-base font-medium tracking-tight mt-4 mb-2 text-foreground/70",
+      1: "scroll-m-20 text-3xl font-bold tracking-tight mt-16 mb-6 text-foreground/90 first:mt-8",
+      2: cn(
+        // Base styles
+        "scroll-m-20 text-2xl font-semibold tracking-tight",
+        "text-foreground/90",
+
+        // Spacing & Border
+        "mt-12 first:mt-6 mb-6",
+        "pb-2 border-b border-border/40",
+
+        // Container width & alignment
+        "w-full",
+
+        // Additional styling
+        "flex items-center gap-2"
+      ),
+      3: "scroll-m-20 text-xl font-semibold tracking-tight mt-8 mb-4 text-foreground/80",
+      4: "scroll-m-20 text-lg font-semibold tracking-tight mt-6 mb-3 text-foreground/80",
+      5: "scroll-m-20 text-base font-medium tracking-tight mt-4 mb-2 text-foreground/70",
+      6: "scroll-m-20 text-sm font-medium tracking-tight mt-4 mb-2 text-foreground/70",
     };
 
     return React.createElement(
       `h${level}`,
       {
         id: slug,
-        className: cn(
-          headingClasses[level],
-          "relative group flex items-center gap-2"
-        ),
+        className: cn(headingClasses[level], "relative group"),
       },
       [
         React.createElement(
@@ -77,8 +88,8 @@ function createHeading(level: HeadingLevel) {
           },
           "#"
         ),
-      ],
-      children
+        children,
+      ]
     );
   };
   return Heading;
@@ -188,6 +199,9 @@ const BlockQuote = (
     </blockquote>
   );
 };
+function Hr() {
+  return <hr className="my-8 border-border/50" />;
+}
 function Table({ data }: any) {
   return (
     <div className="my-8 w-full overflow-hidden rounded-lg border border-border/60">
@@ -233,9 +247,25 @@ function Paragraph(props: any) {
   return (
     <p
       className={cn(
-        "leading-7 [&:not(:first-child)]:my-6",
-        "text-foreground/80",
-        "text-pretty"
+        // Base styles
+        "text-base sm:text-lg text-foreground/80",
+        "leading-relaxed",
+
+        // Spacing
+        "my-6",
+
+        // List context spacing
+        "list-item:my-2",
+        "list-item:first:mt-0",
+        "list-item:last:mb-0",
+
+        // Text formatting
+        "text-pretty",
+        "hyphens-auto",
+
+        // List spacing
+        "[&:has(+ul)]:mb-2",
+        "[&:has(+ol)]:mb-2"
       )}
       {...props}
     />
@@ -246,10 +276,43 @@ function UnorderedList(props: any) {
   return (
     <ul
       className={cn(
-        "my-6 ml-6 list-disc",
-        "[&>li]:mt-2",
-        "text-foreground/80",
-        "marker:text-muted-foreground/50"
+        // Base container styles
+        "my-8 list-none", // Added list-none to reset and apply custom styling
+        "ml-4 sm:ml-6",
+        "space-y-3",
+
+        // List item styling
+        "[&>li]:relative",
+        "[&>li]:pl-6",
+        "[&>li]:text-foreground/80",
+        "[&>li]:leading-relaxed",
+
+        // Custom bullets with pseudo-element
+        "[&>li:before]:absolute",
+        "[&>li:before]:content-['•']", // Explicit bullet character
+        "[&>li:before]:left-0",
+        "[&>li:before]:top-0",
+        "[&>li:before]:text-primary",
+        "[&>li:before]:text-lg",
+        "[&>li:before]:leading-relaxed",
+
+        // Nested list styling
+        "[&>li>ul]:mt-3",
+        "[&>li>ul]:mb-3",
+        "[&>li>ul]:ml-4",
+        "[&>li>ul>li:before]:content-['◦']", // Different bullet for nested lists
+
+        // Typography
+        "text-base sm:text-lg",
+        "leading-relaxed",
+
+        // Content wrapping
+        "[&>li]:break-words",
+
+        // Paragraph spacing in lists
+        "[&>li>p]:my-2",
+        "[&>li>p:first-child]:mt-0",
+        "[&>li>p:last-child]:mb-0"
       )}
       {...props}
     />
@@ -260,11 +323,35 @@ function OrderedList(props: any) {
   return (
     <ol
       className={cn(
-        "my-6 ml-6 list-decimal",
-        "[&>li]:mt-2",
-        "text-foreground/80",
-        "marker:text-muted-foreground/50",
-        "[&>li::marker]:font-medium"
+        // Base container styles
+        "my-8 list-decimal", // Added list-decimal for native numbering
+        "ml-8 sm:ml-10", // Increased margin for numbers
+        "space-y-3",
+
+        // List item styling
+        "[&>li]:relative",
+        "[&>li]:pl-2", // Reduced padding since we're using native numbers
+        "[&>li]:text-foreground/80",
+        "[&>li]:leading-relaxed",
+        "[&>li]:marker:text-primary/70", // Style the numbers
+        "[&>li]:marker:font-medium",
+
+        // Nested list styling
+        "[&>li>ol]:mt-3",
+        "[&>li>ol]:mb-3",
+        "[&>li>ol]:ml-4",
+
+        // Typography
+        "text-base sm:text-lg",
+        "leading-relaxed",
+
+        // Content wrapping
+        "[&>li]:break-words",
+
+        // Paragraph spacing in lists
+        "[&>li>p]:my-2",
+        "[&>li>p:first-child]:mt-0",
+        "[&>li>p:last-child]:mb-0"
       )}
       {...props}
     />
@@ -303,6 +390,9 @@ const components = {
   DNSExplorer,
   NetworkMazeGame,
   BlockQuote,
+  Hr,
+  DNSPlayground,
+  PacketSorter,
 };
 
 export function CustomMDX(props: any) {

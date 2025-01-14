@@ -29,7 +29,7 @@ const Chapter = async ({ params }: { params: Promise<ChapterParams> }) => {
     <div className="min-h-screen">
       <ProgressBar />
 
-      <div className="max-w-4xl mx-auto p-6 font-wotfard pt-16">
+      <div className="max-w-6xl mx-auto p-6 font-wotfard pt-16">
         <header className="mb-8">
           <h1 className="text-4xl font-bold mb-4">{blog.metadata.title}</h1>
           <p className="text-gray-500 mb-2">
