@@ -33,25 +33,15 @@ Imagine you're sending a birthday card to your friend in another city. You write
 
 ### Data Packets: Your Digital Parcels
 
-Just like how a long letter might be sent in multiple envelopes, large files (like videos or images) are split into smaller packets. Each packet:
-
-- Contains a piece of the data
-- Knows where it's going (destination IP)
-- Knows where it came from (source IP)
-- Has a sequence number (so it can be reassembled)
+Data packets are small pieces of data that are broken down from larger files and sent individually over the internet. Each packet contains part of the data, a destination IP address, a source IP address, and a sequence number to ensure they are reassembled in the correct order at the receiving end.
 
 ### IP Addresses: The Internet's Home Addresses
 
-Every device on the internet has a unique address called an IP address. It's like your home address, but for your devices! For example:
-
-- IPv4 addresses look like: 192.168.1.1
-- IPv6 addresses look like: 2001:0db8:85a3:0000:0000:8a2e:0370:7334
+An IP address is a unique identifier assigned to each device connected to the internet. It acts like an address for devices, allowing them to communicate and send data across networks. IP addresses come in two types: IPv4 (e.g., 192.168.1.1) and IPv6 (e.g., 2001:0db8:85a3:0000:0000:8a2e:0370:7334).
 
 ### DNS: The Internet's Phone Directory
 
-Instead of remembering IP addresses like 142.250.190.78, DNS lets us use friendly names like "google.com". It's like having a phone book that converts names to numbers automatically!
-
-<DNSExplorer />
+The Domain Name System (DNS) translates human-readable domain names, like "google.com," into IP addresses that computers use to locate websites. Without DNS, we would need to remember complex IP addresses to access online services.
 
 ## 🏃 Try It Yourself!
 
@@ -84,7 +74,6 @@ Quiz questions will test understanding of:
 - Packet routing
 - IP address structure
 - DNS resolution process
-  [Knowledge Check Quiz]
 
 ## 🌈 Going Further
 
@@ -119,8 +108,3 @@ Design your own network! Draw how you think packets travel from your device to y
   - The internet is not a single network but a network of networks
   - Data doesn't travel as a single piece but in packets
   - Websites aren't stored in the cloud as complete entities
-
-- Extension Activities:
-  - Trace route visualization
-  - Simple packet sniffer demonstration
-  - Build a simple client-server application

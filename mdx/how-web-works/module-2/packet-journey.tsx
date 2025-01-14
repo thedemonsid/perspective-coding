@@ -16,35 +16,34 @@ const PacketJourneyDemo = () => {
   };
 
   return (
-    <Card className="p-4 sm:p-6 w-full max-w-2xl mx-auto bg-gradient-to-br from-background to-muted/50">
-      <div className="flex flex-col items-center space-y-8">
-        <div className="text-center space-y-2">
-          <h3 className="text-xl sm:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/80">
-            Data Packet Journey
-          </h3>
-          <p className="text-sm text-muted-foreground">
-            Visualizing how data travels through networks
-          </p>
-        </div>
+    <Card className="min-h-[calc(100svh-4rem)] flex flex-col bg-gradient-to-br from-background to-muted/50 p-3 my-16">
+      {/* Header Section */}
+      <div className="shrink-0 p-3 border-b border-border/50">
+        <p className="text-xs text-muted-foreground">
+          Visualizing how data travels through networks
+        </p>
+      </div>
 
-        <div className="relative w-full">
-          {/* Network Path */}
-          <div className="absolute top-1/2 left-0 right-0 h-1 bg-gradient-to-r from-primary/20 via-primary/40 to-primary/20 transform -translate-y-1/2" />
+      {/* Network Path - Main Content */}
+      <div className="grow flex items-center justify-center p-4">
+        <div className="relative w-full max-w-md">
+          {/* Connection Line */}
+          <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-gradient-to-r from-primary/20 via-primary/40 to-primary/20 transform -translate-y-1/2" />
 
-          <div className="flex justify-between items-center w-full px-4 sm:px-8">
+          <div className="flex justify-between items-center w-full">
+            {/* Server Icon */}
             <motion.div
               className="flex flex-col items-center z-10"
               whileHover={{ scale: 1.05 }}
             >
-              <div className="p-2 sm:p-3 rounded-xl bg-primary/10">
-                <Server className="w-8 h-8 sm:w-10 sm:h-10 text-primary" />
+              <div className="p-2 rounded-lg bg-primary/10">
+                <Server className="w-5 h-5 text-primary" />
               </div>
-              <span className="text-xs sm:text-sm mt-2 font-medium">
-                Server
-              </span>
+              <span className="text-xs mt-1 font-medium">Server</span>
             </motion.div>
 
-            <div className="flex-1 relative h-20 flex items-center justify-center">
+            {/* Packets Animation */}
+            <div className="flex-1 relative h-14 flex items-center justify-center">
               <AnimatePresence>
                 {packets.map((packet, index) => (
                   <motion.div
@@ -63,59 +62,31 @@ const PacketJourneyDemo = () => {
                       ease: "easeInOut",
                     }}
                   >
-                    <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-gradient-to-r from-primary to-primary/80 shadow-lg shadow-primary/20" />
+                    <div className="w-4 h-4 rounded-full bg-gradient-to-r from-primary to-primary/80 shadow-lg shadow-primary/20" />
                   </motion.div>
                 ))}
               </AnimatePresence>
             </div>
 
+            {/* Device Icon */}
             <motion.div
               className="flex flex-col items-center z-10"
               whileHover={{ scale: 1.05 }}
             >
-              <div className="p-2 sm:p-3 rounded-xl bg-primary/10">
-                <Smartphone className="w-8 h-8 sm:w-10 sm:h-10 text-primary" />
+              <div className="p-2 rounded-lg bg-primary/10">
+                <Smartphone className="w-5 h-5 text-primary" />
               </div>
-              <span className="text-xs sm:text-sm mt-2 font-medium">
-                Device
-              </span>
+              <span className="text-xs mt-1 font-medium">Device</span>
             </motion.div>
           </div>
         </div>
+      </div>
 
-        <div className="flex flex-wrap gap-3 justify-center">
-          <Button
-            onClick={createPacket}
-            disabled={packets.length >= 4}
-            className="relative group"
-            variant="outline"
-          >
-            <span className="relative z-10">Create Packet</span>
-            <div className="absolute inset-0 bg-primary/10 scale-x-0 group-hover:scale-x-100 transition-transform origin-left rounded-md" />
-          </Button>
-
-          <Button
-            onClick={() => setStep((prev) => prev + 1)}
-            disabled={step >= 3 || packets.length === 0}
-            className="bg-primary"
-          >
-            Send Packets
-          </Button>
-
-          <Button
-            onClick={() => {
-              setStep(0);
-              setPackets([]);
-            }}
-            variant="ghost"
-            className="hover:bg-destructive/10 hover:text-destructive"
-          >
-            Reset
-          </Button>
-        </div>
-
+      {/* Controls Section */}
+      <div className="shrink-0 p-3 border-t border-border/50 space-y-3">
+        {/* Status Message */}
         <motion.div
-          className="text-sm text-center px-4 py-2 rounded-full bg-muted"
+          className="text-xs text-center px-3 py-1.5 rounded-full bg-muted"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           key={step}
@@ -125,6 +96,37 @@ const PacketJourneyDemo = () => {
           {step === 2 && "Packets are being reassembled..."}
           {step === 3 && "Data received successfully! 🎉"}
         </motion.div>
+
+        {/* Control Buttons */}
+        <div className="flex justify-center gap-2">
+          <Button
+            onClick={createPacket}
+            disabled={packets.length >= 4}
+            className="h-8 text-xs"
+            variant="outline"
+          >
+            Create Packet
+          </Button>
+
+          <Button
+            onClick={() => setStep((prev) => prev + 1)}
+            disabled={step >= 3 || packets.length === 0}
+            className="h-8 text-xs bg-primary"
+          >
+            Send
+          </Button>
+
+          <Button
+            onClick={() => {
+              setStep(0);
+              setPackets([]);
+            }}
+            variant="ghost"
+            className="h-8 text-xs hover:bg-destructive/10 hover:text-destructive"
+          >
+            Reset
+          </Button>
+        </div>
       </div>
     </Card>
   );
