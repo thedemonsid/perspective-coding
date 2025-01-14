@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { signOut } from "@/auth";
 import Link from "next/link";
 
-export function SignOut() {
+function SignOut() {
   return (
     <form
       action={async () => {
