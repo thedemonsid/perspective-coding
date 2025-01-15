@@ -31,6 +31,11 @@ export default function QuizComponent({
     setIsCorrect(option === answer);
   };
 
+  const handleTryAgain = () => {
+    setSelected(null);
+    setIsCorrect(false);
+  };
+
   if (!Array.isArray(options) || options.length === 0) {
     return (
       <div className="text-foreground">Please provide valid quiz options</div>
@@ -38,8 +43,9 @@ export default function QuizComponent({
   }
 
   return (
-    <Card className="w-full max-w-2xl mx-auto border bg-card shadow-lg m-3">
+    <Card className="w-full max-w-2xl mx-auto border bg-card shadow-lg mb-8 p-2">
       <CardContent className="p-4 sm:p-6 md:p-8 space-y-6 sm:space-y-8">
+        {/* Question */}
         <motion.h3
           className="text-lg sm:text-xl md:text-2xl font-semibold text-foreground leading-relaxed"
           initial={{ y: -20 }}
@@ -49,6 +55,7 @@ export default function QuizComponent({
           {question}
         </motion.h3>
 
+        {/* Options */}
         <div className="grid gap-3 sm:gap-4">
           {options.map((option, index) => (
             <motion.div
@@ -69,12 +76,12 @@ export default function QuizComponent({
                   text-sm sm:text-base md:text-lg font-medium
                   ${
                     selected === option && isCorrect
-                      ? "bg-green-100 dark:bg-green-900/20 border-green-200 dark:border-green-800 shadow-green-100/50 dark:shadow-green-900/20"
+                      ? "bg-primary/10 border-primary/50 hover:bg-primary/10"
                       : ""
                   }
                   ${
                     selected === option && !isCorrect
-                      ? "bg-destructive/10 border-destructive/50 shadow-destructive/20"
+                      ? "bg-destructive/10 border-destructive/50 hover:bg-destructive/10"
                       : ""
                   }
                   hover:scale-[1.01] active:scale-[0.99]
@@ -96,16 +103,17 @@ export default function QuizComponent({
           ))}
         </div>
 
+        {/* Feedback */}
         <AnimatePresence>
           {selected && (
             <motion.div
               initial={{ opacity: 0, height: 0, y: 20 }}
               animate={{ opacity: 1, height: "auto", y: 0 }}
               exit={{ opacity: 0, height: 0, y: 20 }}
-              className={`flex items-center gap-3 p-4 sm:p-6 rounded-xl shadow-lg
+              className={`flex flex-col gap-3 p-4 sm:p-6 rounded-xl shadow-lg
                 ${
                   isCorrect
-                    ? "bg-green-100 dark:bg-green-900/20 border border-green-200 dark:border-green-800"
+                    ? "bg-primary/10 border border-primary/50"
                     : "bg-destructive/10 border border-destructive/50"
                 }`}
             >
@@ -114,7 +122,7 @@ export default function QuizComponent({
                   initial={{ scale: 0.8 }}
                   animate={{ scale: 1 }}
                   transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                  className="flex items-center gap-3 text-green-700 dark:text-green-300"
+                  className="flex items-center gap-3 text-primary"
                 >
                   <CheckCircle className="w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0" />
                   <span className="text-sm sm:text-base md:text-lg font-medium leading-relaxed">
@@ -122,17 +130,26 @@ export default function QuizComponent({
                   </span>
                 </motion.div>
               ) : (
-                <motion.div
-                  initial={{ scale: 0.8 }}
-                  animate={{ scale: 1 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                  className="flex items-center gap-3 text-destructive"
-                >
-                  <XCircle className="w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0" />
-                  <span className="text-sm sm:text-base md:text-lg font-medium leading-relaxed">
-                    Not quite there. Want to try again?
-                  </span>
-                </motion.div>
+                <div className="flex flex-col gap-3">
+                  <motion.div
+                    initial={{ scale: 0.8 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                    className="flex items-center gap-3 text-destructive"
+                  >
+                    <XCircle className="w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0" />
+                    <span className="text-sm sm:text-base md:text-lg font-medium leading-relaxed">
+                      Not quite there. Want to try again?
+                    </span>
+                  </motion.div>
+                  <Button
+                    onClick={handleTryAgain}
+                    variant="outline"
+                    className="w-fit self-end"
+                  >
+                    Try Again
+                  </Button>
+                </div>
               )}
             </motion.div>
           )}

@@ -38,30 +38,37 @@ DNS (Domain Name System) is like the internet's phone directory. It converts hum
 
 ### How DNS Works
 
-1. Your computer asks: "Where's google.com?"
-2. The DNS resolver starts searching
-3. Different DNS servers work together to find the answer
-4. Your computer gets the IP address and connects!
+DNS is a complex system that follows a structured process:
+
+1. **Your Computer Asks**: When you type in a URL (e.g.,google.com), your computer needs to know the corresponding IP address to make the connection.
+2. **DNS Resolver Starts Searching**: Your system asks a DNS resolver to begin looking up the domain name.
+3. **Hierarchy of DNS Servers**: The resolver communicates with various DNS servers in a hierarchical way to find the IP address:
+   - **Root Servers** provide the top-level domain (TLD) information.
+   - **TLD Servers** help refine the search to specific domain types (.com, .org, etc.).
+   - **Authoritative Servers** finally give the precise IP address tied to the domain.
+4. **Your Computer Receives the IP**: Once the IP address is found, your computer connects to the desired site.
 
 ### DNS Hierarchy
 
-Think of it like a library:
+Think of DNS like a library system:
 
-- Root Servers (The main catalog)
-- TLD Servers (.com, .org, .net sections)
-- Authoritative Servers (Individual book locations)
+- **Root Servers**: The main catalog that contains the top-level domain (TLD) information.
+- **TLD Servers**: These manage different domain name endings like `.com`, `.org`, `.net`.
+- **Authoritative Servers**: These are the specific servers that have the exact location of the domain you requested.
 
-[Interactive DNS Explorer Goes Here]
+### DNS Caching
+
+DNS caching is like saving your friend's phone number in your contact list. When your system looks up a domain name, it temporarily stores the result (the IP address). This speeds up future requests for the same domain by not having to go through the entire lookup process again.
 
 ## 🏃 Try It Yourself!
 
 ### DNS Detective Game
 
-Let's play DNS detective! Use these tools to explore:
+Let's become internet detectives! Here are some cool ways to uncover website secrets:
 
-- `nslookup` in command prompt
-- Browser's developer tools
-- Online DNS lookup tools
+- Use "Who Is This Website?" websites to find out who owns your favorite social media sites
+- Check how fast different websites load in your browser's special detective tools (press F12!)(More in class ! )
+- Play with free website trackers to see where your favorite sites are located around the world
 
 <DNSDetective />
 
@@ -121,25 +128,26 @@ DNS is the crucial system that:
 
 Key Technical Concepts:
 
-1. Record Types:
+### Record Types:
 
-   - A (IPv4 addresses)
-   - AAAA (IPv6 addresses)
-   - CNAME (aliases)
-   - MX (mail servers)
-   - TXT (text information)
+- **A** (IPv4 addresses)
+- **AAAA** (IPv6 addresses)
+- **CNAME** (aliases)
+- **MX** (mail servers)
+- **TXT** (text information)
 
-2. DNS Resolution Process:
+### DNS Resolution Process:
 
-   - Recursive resolution
-   - Iterative queries
-   - Cache management
-   - TTL (Time To Live)
+- **Recursive resolution**: The entire process until the final IP is found.
+- **Iterative queries**: DNS servers try to answer based on what they know.
+- **Cache management**: Temporary storage of previous lookups.
+- **TTL** (Time To Live): Duration the DNS record can be cached.
 
-3. DNS Security:
-   - DNSSEC
-   - DNS over HTTPS (DoH)
-   - DNS over TLS (DoT)
+### DNS Security:
+
+- **DNSSEC**: Adds cryptographic signatures to ensure data integrity.
+- **DNS over HTTPS** (DoH): Encrypts DNS queries using HTTPS.
+- **DNS over TLS** (DoT): Encrypts DNS queries using TLS.
 
 ## 👩‍🏫 Teacher's Notes
 
@@ -150,8 +158,6 @@ Key Technical Concepts:
 3. Recognizing common DNS record types
 4. Troubleshooting basic DNS issues
 
-<Hr />
-
 #### Suggested Activities:
 
 1. DNS lookup treasure hunt
@@ -159,15 +165,11 @@ Key Technical Concepts:
 3. Analyzing DNS query times
 4. Creating DNS record diagrams
 
-<Hr />
-
 #### Common Misconceptions:
 
-- DNS is not a directory but a distributed database
-- DNS caching doesn't always mean faster browsing
-- Not all DNS servers store the same information
-
-<Hr />
+- DNS is not a directory but a distributed database.
+- DNS caching doesn’t always mean faster browsing.
+- Not all DNS servers store the same information.
 
 #### Additional Resources:
 

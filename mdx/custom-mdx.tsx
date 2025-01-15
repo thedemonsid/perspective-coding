@@ -13,7 +13,7 @@ import Quizcomponent from "./quizcomponent";
 import InfoCard from "./doyouknowcard";
 import PacketJourneyDemo from "./how-web-works/module-2/packet-journey";
 import PacketRoutingGame from "./how-web-works/module-2/find-route";
-import HomeNetworkFinder from "./how-web-works/module-1/virt-home";
+
 import {
   LemonadeCalculator,
   PatternRecognitionGame,
@@ -27,6 +27,16 @@ import DNSExplorer from "./persepctive-dns";
 import NetworkMazeGame from "./how-web-works/module-2/network-maze";
 import DNSPlayground from "./how-web-works/module-2/dns-playground";
 import PacketSorter from "./how-web-works/module-2/find-route";
+import {
+  DataPacketSimulator,
+  DeviceCounter,
+  NetworkLatencySimulator,
+} from "./how-web-works/module-1/network-content";
+import {
+  MessageSpeedComparator,
+  MessageTranslator,
+  CommunicationCostCalculator,
+} from "./how-web-works/module-2/communication-content";
 
 function slugify(text: string) {
   return text
@@ -379,7 +389,6 @@ const components = {
   InfoCard,
   PacketJourneyDemo,
   PacketRoutingGame,
-  HomeNetworkFinder,
   LemonadeCalculator,
   PatternRecognitionGame,
   StoryCreatorTool,
@@ -393,6 +402,12 @@ const components = {
   Hr,
   DNSPlayground,
   PacketSorter,
+  DeviceCounter,
+  DataPacketSimulator,
+  NetworkLatencySimulator,
+  MessageSpeedComparator,
+  MessageTranslator,
+  CommunicationCostCalculator,
 };
 
 export function CustomMDX(props: any) {
