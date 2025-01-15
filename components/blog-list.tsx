@@ -14,8 +14,8 @@ export default function BlogsList({ blogs }: { blogs: BlogProps[] }) {
               Articles and Tutorials
             </h1>
             <p className="text-muted-foreground text-lg max-w-2xl">
-              {blogs.length} hand-crafted articles about JavaScript, React, and
-              modern web development
+              {blogs.length} hand-crafted articles about Internet, Web
+              Development, AI , Mathematics and Programming.
             </p>
           </div>
 

@@ -2,9 +2,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export default function BlogLoading() {
   return (
-    <div className="max-w-4xl mx-auto p-6 space-y-6">
+    <div className="w-full my-20 mx-96  space-y-6">
       {/* Title skeleton */}
-      <Skeleton className="h-12 w-3/4" />
+      <Skeleton className="h-16 w-3/4" />
 
       {/* Date skeleton */}
       <Skeleton className="h-4 w-32" />

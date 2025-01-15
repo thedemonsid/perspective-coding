@@ -6,7 +6,13 @@
  *
  * @default ["/", "/about", "/courses", "/courses/[courseId]"]
  */
-export const publicRoutes = ["/", "/about", "/courses", "/courses/[courseId]"];
+export const publicRoutes = [
+  "/",
+  "/about",
+  "/courses",
+  "/courses/[courseId]",
+  "/blogs",
+];
 
 /**
  * An array of authentication route paths.
@@ -14,7 +20,13 @@ export const publicRoutes = ["/", "/about", "/courses", "/courses/[courseId]"];
  * This array contains the paths for the login and register routes
  * used in the authentication process.
  */
-export const authRoutes = ["/auth/login", "/auth/register", "/auth/error","/auth/verify-email","/auth/reset"];
+export const authRoutes = [
+  "/auth/login",
+  "/auth/register",
+  "/auth/error",
+  "/auth/verify-email",
+  "/auth/reset",
+];
 
 /**
  * The prefix for API authentication routes.

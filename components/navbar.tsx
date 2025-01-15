@@ -18,7 +18,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { useSession } from "next-auth/react";
 import { Session } from "next-auth";
 
-const navItems = [{ name: "Courses", href: "/courses" }];
+const navItems = [{ name: "Courses", href: "/blogs" }];
 
 const UserMenu = ({ session }: { session: Session }) => (
   <DropdownMenu>
