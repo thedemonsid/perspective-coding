@@ -14,13 +14,16 @@ export default auth((req) => {
   const isLoggedIn = !!req.auth;
 
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
-  const isPublicRoute = publicRoutes.some(route => {
+  const isPublicRoute = publicRoutes.some((route) => {
     // Convert the route to a regex pattern
     const regex = new RegExp(`^${route.replace(/\[.*?\]/g, "[^/]+")}$`);
     return regex.test(nextUrl.pathname);
   });
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
   if (isApiAuthRoute) {
+    return;
+  }
+  if (nextUrl.pathname.startsWith("/blogs")) {
     return;
   }
   if (isAuthRoute) {
