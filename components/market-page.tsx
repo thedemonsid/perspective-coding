@@ -177,14 +177,14 @@ export default async function Market() {
                   className="inline-flex items-center justify-center bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-4 rounded-lg font-semibold text-base shadow-lg shadow-primary/20 transition-all"
                   size="lg"
                 >
-                  Start Learning Now
+                  <Link href={"/blogs"}> Start Learning Now</Link>
                 </Button>
                 <Button
                   variant="outline"
                   className="inline-flex items-center justify-center border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground px-8 py-4 rounded-lg font-semibold text-base transition-all"
                   size="lg"
                 >
-                  <Link href={"/courses"}> Try Now !!</Link>
+                  <Link href={"/blogs"}> Try Now !!</Link>
                 </Button>
               </div>
               <div className="mt-8 flex items-center gap-6">

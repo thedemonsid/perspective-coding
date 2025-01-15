@@ -48,7 +48,7 @@ export default async function LogOut() {
               size="lg"
               className="relative group overflow-hidden"
             >
-              <Link href="/courses">
+              <Link href="/blogs">
                 <span className="relative z-10">No, Take me back</span>
                 <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               </Link>
